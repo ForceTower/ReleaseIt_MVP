@@ -22,5 +22,4 @@ class CubicApp : DaggerApplication() {
     }
 
     override fun applicationInjector() = component
-
 }

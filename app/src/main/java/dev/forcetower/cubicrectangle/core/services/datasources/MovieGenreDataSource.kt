@@ -55,6 +55,7 @@ class MovieGenreDataSource(
     }
 
     override fun invalidate() {
+        Timber.d("Invalidated data source")
         super.invalidate()
         scope.cancel("DataSource invalidated")
     }

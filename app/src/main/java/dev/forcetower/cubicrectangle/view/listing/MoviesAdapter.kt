@@ -9,17 +9,25 @@ import dev.forcetower.cubicrectangle.core.extensions.inflate
 import dev.forcetower.cubicrectangle.core.model.database.Movie
 import dev.forcetower.cubicrectangle.databinding.ItemMovieBinding
 
-class MoviesAdapter: PagedListAdapter<Movie, MoviesAdapter.MovieHolder>(DiffCallback) {
+class MoviesAdapter(
+    private val view: ListingContract.View
+) : PagedListAdapter<Movie, MoviesAdapter.MovieHolder>(DiffCallback) {
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): MovieHolder {
-        return MovieHolder(parent.inflate(R.layout.item_movie))
+        return MovieHolder(parent.inflate(R.layout.item_movie), view)
     }
 
     override fun onBindViewHolder(holder: MovieHolder, position: Int) {
         holder.binding.movie = getItem(position)
     }
 
-    inner class MovieHolder(val binding: ItemMovieBinding) : RecyclerView.ViewHolder(binding.root)
-
+    inner class MovieHolder(
+        val binding: ItemMovieBinding,
+        view: ListingContract.View
+    ) : RecyclerView.ViewHolder(binding.root) {
+        init {
+            binding.contract = view
+        }
+    }
     private object DiffCallback : DiffUtil.ItemCallback<Movie>() {
         override fun areItemsTheSame(oldItem: Movie, newItem: Movie) = oldItem.id == newItem.id
         override fun areContentsTheSame(oldItem: Movie, newItem: Movie) = oldItem == newItem

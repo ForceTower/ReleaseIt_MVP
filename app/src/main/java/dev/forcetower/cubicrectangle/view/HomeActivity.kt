@@ -4,7 +4,7 @@ import android.os.Bundle
 import dev.forcetower.cubicrectangle.R
 import dev.forcetower.cubicrectangle.core.base.BaseActivity
 import dev.forcetower.cubicrectangle.core.extensions.inTransaction
-import dev.forcetower.cubicrectangle.view.listing.BaseGenreFragment
+import dev.forcetower.cubicrectangle.view.listing.GenreListingFragment
 
 class HomeActivity : BaseActivity() {
 
@@ -13,7 +13,7 @@ class HomeActivity : BaseActivity() {
         setContentView(R.layout.activity_main)
         if (savedInstanceState == null) {
             supportFragmentManager.inTransaction {
-                add(R.id.fragment_container, BaseGenreFragment())
+                add(R.id.fragment_container, GenreListingFragment())
             }
         }
     }

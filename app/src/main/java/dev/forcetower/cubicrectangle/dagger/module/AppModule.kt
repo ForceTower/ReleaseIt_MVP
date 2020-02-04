@@ -18,7 +18,6 @@ import org.threeten.bp.LocalDate
 import org.threeten.bp.ZonedDateTime
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
-import timber.log.Timber
 import java.util.concurrent.TimeUnit
 import javax.inject.Singleton
 
@@ -35,7 +34,6 @@ object AppModule {
     fun provideInterceptor() = object : Interceptor {
         override fun intercept(chain: Interceptor.Chain): Response {
             val request = chain.request()
-            Timber.d("Going to: ${request.url.toUrl()}")
             val host = request.url.host
             return if (host.contains(Constants.TMDB_URL, ignoreCase = true)) {
                 val headers = request.headers.newBuilder()
@@ -68,7 +66,7 @@ object AppModule {
             .addInterceptor(interceptor)
             .addInterceptor(HttpLoggingInterceptor().apply {
                 level = if (BuildConfig.DEBUG)
-                    HttpLoggingInterceptor.Level.BODY
+                    HttpLoggingInterceptor.Level.NONE
                 else
                     HttpLoggingInterceptor.Level.NONE
             })

@@ -7,14 +7,21 @@ import javax.inject.Inject
 
 class ListingPresenter @Inject constructor(
     private val repository: MoviesRepository
-): ListingContract.Presenter {
-    private lateinit var view: ListingContract.View
+) : ListingContract.Presenter {
+    private var view: ListingContract.View? = null
+    private var source: PagedList<Movie>? = null
 
     override fun attach(v: ListingContract.View) {
         view = v
     }
 
+    override fun onDestroy() {
+        view = null
+    }
+
     override fun loadMoviesByGenre(genreId: Long): PagedList<Movie> {
-        return repository.getMoviesByGenre(genreId, view.getLifecycleScope())
+        val src = source ?: repository.getMoviesByGenre(genreId, view!!.getLifecycleScope())
+        source = src
+        return src
     }
 }

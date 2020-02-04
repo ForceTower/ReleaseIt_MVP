@@ -2,7 +2,7 @@
 <layout xmlns:android="http://schemas.android.com/apk/res/android">
     <data>
         <variable
-            name="presenter"
+            name="contract"
             type="dev.forcetower.cubicrectangle.view.listing.ListingContract.View" />
 
         <variable
@@ -13,5 +13,6 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:padding="16dp"
+        android:onClick="@{() -> contract.onMovieClick(movie)}"
         android:text="@{movie.title}"/>
 </layout>
