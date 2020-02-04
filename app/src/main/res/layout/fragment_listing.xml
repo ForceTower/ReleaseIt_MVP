@@ -11,6 +11,6 @@
         android:paddingBottom="16dp"
         android:clipToPadding="false"
         app:layoutManager="androidx.recyclerview.widget.GridLayoutManager"
-        app:spanCount="2"
+        app:spanCount="@integer/fragment_listing_span_count"
         tools:listitem="@layout/item_movie"/>
 </layout>
