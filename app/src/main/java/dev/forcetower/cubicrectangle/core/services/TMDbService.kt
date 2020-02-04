@@ -28,7 +28,7 @@ interface TMDbService {
 
     @GET("discover/movie")
     suspend fun moviesByGenre(
-        @Query("with_genre") genre: String,
+        @Query("with_genres") genre: String,
         @Query("page") page: Int = 1
     ): MoviesResponse
 }
