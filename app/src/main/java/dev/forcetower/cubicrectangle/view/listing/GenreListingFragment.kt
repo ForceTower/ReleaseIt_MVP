@@ -70,4 +70,6 @@ class GenreListingFragment : BaseFragment(), ListingContract.View {
         presenter.onDestroy()
         super.onDestroy()
     }
+
+    override fun shouldApplyTopInsets() = false
 }
