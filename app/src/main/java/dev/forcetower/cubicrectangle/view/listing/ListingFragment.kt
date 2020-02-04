@@ -4,20 +4,19 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.activity.viewModels
 import androidx.annotation.StringRes
+import androidx.core.os.bundleOf
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.viewModelScope
 import dev.forcetower.cubicrectangle.core.base.BaseFragment
 import dev.forcetower.cubicrectangle.core.base.BaseViewModelFactory
 import dev.forcetower.cubicrectangle.core.model.database.Movie
 import dev.forcetower.cubicrectangle.databinding.FragmentListingBinding
-import dev.forcetower.cubicrectangle.view.HomeViewModel
 import kotlinx.coroutines.CoroutineScope
 import timber.log.Timber
 import javax.inject.Inject
 
-class GenreListingFragment : BaseFragment(), ListingContract.View {
+class ListingFragment : BaseFragment(), ListingContract.View {
 //    I moved the presenter to the viewModel so it's instance state is preserved
 //    across configuration changes, but, uncommenting the code below and the
 //    getLifecycleScope return, all should still fine
@@ -29,7 +28,7 @@ class GenreListingFragment : BaseFragment(), ListingContract.View {
     lateinit var factory: BaseViewModelFactory
 
     private lateinit var binding: FragmentListingBinding
-    private val viewModel by viewModels<HomeViewModel> { factory }
+    private val viewModel by viewModels<ListingViewModel> { factory }
     private val presenter: ListingContract.Presenter
         get() = viewModel.listingPresenter
 
@@ -72,4 +71,13 @@ class GenreListingFragment : BaseFragment(), ListingContract.View {
     }
 
     override fun shouldApplyTopInsets() = false
+
+    companion object {
+        fun newInstance(genreId: Long): ListingFragment {
+            return ListingFragment()
+                .apply {
+                    arguments = bundleOf("genre_id" to genreId)
+                }
+        }
+    }
 }
