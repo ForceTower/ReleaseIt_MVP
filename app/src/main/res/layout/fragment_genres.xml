@@ -9,6 +9,8 @@
             android:id="@+id/app_bar"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:paddingBottom="2dp"
+            app:liftOnScroll="@bool/not_on_night_mode"
             style="@style/Widget.MaterialComponents.AppBarLayout.Surface">
 
             <androidx.constraintlayout.widget.ConstraintLayout
@@ -56,16 +58,19 @@
             <com.google.android.material.tabs.TabLayout
                 android:id="@+id/tab_layout"
                 android:layout_width="match_parent"
-                android:layout_height="?actionBarSize"
-                style="@style/Widget.MaterialComponents.TabLayout"
-                app:tabContentStart="36dp"
+                android:layout_height="?attr/actionBarSize"
+                android:background="@null"
                 app:tabGravity="fill"
-                app:tabIndicatorFullWidth="false"
-                app:tabMode="scrollable"
                 app:tabTextColor="?attr/colorPrimary"
                 app:tabIndicatorColor="?attr/colorPrimary"
                 app:tabTextAppearance="@style/Release.Widget.TabLayout.TextAppearance"/>
 
         </com.google.android.material.appbar.AppBarLayout>
+
+        <androidx.viewpager.widget.ViewPager
+            android:id="@+id/pager_genres"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            app:layout_behavior="@string/appbar_scrolling_view_behavior"/>
     </androidx.coordinatorlayout.widget.CoordinatorLayout>
 </layout>

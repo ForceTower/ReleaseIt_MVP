@@ -7,7 +7,7 @@ import dev.forcetower.cubicrectangle.R
 import dev.forcetower.cubicrectangle.core.base.BaseActivity
 import dev.forcetower.cubicrectangle.core.extensions.inTransaction
 import dev.forcetower.cubicrectangle.databinding.ActivityHomeBinding
-import dev.forcetower.cubicrectangle.view.listing.GenreListingFragment
+import dev.forcetower.cubicrectangle.view.listing.GenresFragment
 
 class HomeActivity : BaseActivity() {
     private lateinit var binding: ActivityHomeBinding
@@ -22,7 +22,7 @@ class HomeActivity : BaseActivity() {
 
         if (savedInstanceState == null) {
             supportFragmentManager.inTransaction {
-                add(R.id.fragment_container, GenreListingFragment())
+                add(R.id.fragment_container, GenresFragment())
             }
         }
     }

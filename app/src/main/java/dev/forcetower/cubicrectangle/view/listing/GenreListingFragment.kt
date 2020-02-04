@@ -50,7 +50,7 @@ class GenreListingFragment : BaseFragment(), ListingContract.View {
         binding.apply {
             recyclerMovies.adapter = adapter
         }
-        adapter.submitList(presenter.loadMoviesByGenre(12))
+        adapter.submitList(presenter.loadMoviesByGenre(requireArguments().getLong("genre_id")))
     }
 
     override fun getLifecycleScope(): CoroutineScope {
