@@ -2,8 +2,8 @@ package dev.forcetower.cubicrectangle.dagger.module
 
 import dagger.Module
 import dagger.android.ContributesAndroidInjector
-import dev.forcetower.cubicrectangle.dagger.module.activities.HomeModule
-import dev.forcetower.cubicrectangle.dagger.module.activities.HomePresentersModule
+import dev.forcetower.cubicrectangle.dagger.module.home.HomeModule
+import dev.forcetower.cubicrectangle.dagger.module.home.HomePresentersModule
 import dev.forcetower.cubicrectangle.view.HomeActivity
 
 @Module

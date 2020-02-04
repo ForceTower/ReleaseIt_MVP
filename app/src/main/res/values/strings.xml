@@ -1,3 +1,7 @@
 <resources>
     <string name="app_name">CubicRectangle</string>
+    <string name="movies_title">Movies</string>
+    <string name="logo_name_start">Release</string>
+    <string name="logo_name_end">It</string>
+    <string name="nav_search">Search</string>
 </resources>

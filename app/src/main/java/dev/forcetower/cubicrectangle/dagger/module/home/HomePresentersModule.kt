@@ -1,4 +1,4 @@
-package dev.forcetower.cubicrectangle.dagger.module.activities
+package dev.forcetower.cubicrectangle.dagger.module.home
 
 import dagger.Module
 import dagger.Provides
