@@ -86,7 +86,7 @@ class SearchPresenterTest {
     }
 
     @Test
-    fun fetchErrorInvokesLambda() {
+    fun fetchErrorInvokesViewOnError() {
         presenter.search("throw error", MainScope())
         val intCaptor = ArgumentCaptor.forClass(Int::class.java)
         intCaptor.run {
