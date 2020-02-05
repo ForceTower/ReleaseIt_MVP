@@ -8,13 +8,14 @@ import androidx.annotation.StringRes
 import androidx.core.os.bundleOf
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.viewModelScope
+import androidx.navigation.fragment.findNavController
 import dev.forcetower.cubicrectangle.core.base.BaseFragment
 import dev.forcetower.cubicrectangle.core.base.BaseViewModelFactory
 import dev.forcetower.cubicrectangle.model.database.Movie
 import dev.forcetower.cubicrectangle.databinding.FragmentListingBinding
 import dev.forcetower.cubicrectangle.view.common.MoviesAdapter
+import dev.forcetower.cubicrectangle.view.genres.GenresFragmentDirections
 import kotlinx.coroutines.CoroutineScope
-import timber.log.Timber
 import javax.inject.Inject
 
 class ListingFragment : BaseFragment(), ListingContract.View {
@@ -59,7 +60,8 @@ class ListingFragment : BaseFragment(), ListingContract.View {
     }
 
     override fun onMovieClick(movie: Movie) {
-        Timber.d("Movie clicked $movie")
+        val direction = GenresFragmentDirections.actionGenresToDetails(movie.id)
+        findNavController().navigate(direction)
     }
 
     override fun onLoadError(@StringRes resource: Int) {

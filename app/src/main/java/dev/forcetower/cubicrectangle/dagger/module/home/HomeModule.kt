@@ -2,6 +2,7 @@ package dev.forcetower.cubicrectangle.dagger.module.home
 
 import dagger.Module
 import dagger.android.ContributesAndroidInjector
+import dev.forcetower.cubicrectangle.view.details.DetailsFragment
 import dev.forcetower.cubicrectangle.view.listing.ListingFragment
 import dev.forcetower.cubicrectangle.view.genres.GenresFragment
 import dev.forcetower.cubicrectangle.view.search.SearchFragment
@@ -14,4 +15,6 @@ abstract class HomeModule {
     abstract fun genres(): GenresFragment
     @ContributesAndroidInjector
     abstract fun search(): SearchFragment
+    @ContributesAndroidInjector
+    abstract fun details(): DetailsFragment
 }

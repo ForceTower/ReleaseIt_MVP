@@ -8,6 +8,7 @@ import dagger.multibindings.IntoMap
 import dev.forcetower.cubicrectangle.core.base.BaseViewModelFactory
 import dev.forcetower.cubicrectangle.view.listing.ListingViewModel
 import dev.forcetower.cubicrectangle.dagger.annotation.ViewModelKey
+import dev.forcetower.cubicrectangle.view.details.DetailsViewModel
 import dev.forcetower.cubicrectangle.view.search.SearchViewModel
 
 @Module
@@ -21,6 +22,11 @@ abstract class ViewModelModule {
     @IntoMap
     @ViewModelKey(SearchViewModel::class)
     abstract fun bindSearchViewModel(vm: SearchViewModel): ViewModel
+
+    @Binds
+    @IntoMap
+    @ViewModelKey(DetailsViewModel::class)
+    abstract fun bindDetailsViewModel(vm: DetailsViewModel): ViewModel
 
     @Binds
     abstract fun bindFactory(factory: BaseViewModelFactory): ViewModelProvider.Factory

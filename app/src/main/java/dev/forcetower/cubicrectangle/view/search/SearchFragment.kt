@@ -19,7 +19,6 @@ import dev.forcetower.cubicrectangle.model.database.Movie
 import dev.forcetower.cubicrectangle.databinding.FragmentSearchBinding
 import dev.forcetower.cubicrectangle.view.common.MoviesAdapter
 import kotlinx.coroutines.CoroutineScope
-import timber.log.Timber
 import javax.inject.Inject
 
 class SearchFragment : BaseFragment(), SearchContract.View {
@@ -72,7 +71,8 @@ class SearchFragment : BaseFragment(), SearchContract.View {
     }
 
     override fun onMovieClick(movie: Movie) {
-        Timber.d("Movie click ${movie.title}")
+        val direction = SearchFragmentDirections.actionSearchToDetails(movie.id)
+        findNavController().navigate(direction)
     }
 
     override fun onLoadError(@StringRes resource: Int) {
@@ -85,6 +85,11 @@ class SearchFragment : BaseFragment(), SearchContract.View {
 
     override fun onClearSearch() {
         binding.editQuery.setText("")
+    }
+
+    override fun onDestroy() {
+        presenter.onDestroy()
+        super.onDestroy()
     }
 
     override fun shouldApplyBottomInsets() = false

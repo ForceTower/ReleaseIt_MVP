@@ -13,10 +13,25 @@
         <action
             android:id="@+id/action_genres_to_search"
             app:destination="@id/search" />
+        <action
+            android:id="@+id/action_genres_to_details"
+            app:destination="@id/details" />
     </fragment>
     <fragment
         android:id="@+id/search"
         android:name="dev.forcetower.cubicrectangle.view.search.SearchFragment"
         android:label="SearchFragment"
-        tools:layout="@layout/fragment_search"/>
+        tools:layout="@layout/fragment_search">
+        <action
+            android:id="@+id/action_search_to_details"
+            app:destination="@id/details" />
+    </fragment>
+    <fragment
+        android:id="@+id/details"
+        android:name="dev.forcetower.cubicrectangle.view.details.DetailsFragment"
+        android:label="DetailsFragment"
+        tools:layout="@layout/fragment_details">
+        <argument android:name="movieId"
+            app:argType="long" />
+    </fragment>
 </navigation>

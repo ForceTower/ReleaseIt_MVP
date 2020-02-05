@@ -34,16 +34,6 @@ class MoviesRepository @Inject constructor(
         }
     }
 
-    fun getMovie(movieId: Long): LiveData<Movie> {
-        return liveData(Dispatchers.IO) {
-            try {
-                emit(service.movieDetails(movieId).toMovie())
-            } catch (t: Throwable) {
-                Timber.e(t)
-            }
-        }
-    }
-
     fun searchLive(query: String): LiveData<List<Movie>> {
 
         return liveData(Dispatchers.IO) {
@@ -53,6 +43,21 @@ class MoviesRepository @Inject constructor(
                 Timber.d("Result $result")
             } catch (t: Throwable) {
                 Timber.e(t)
+            }
+        }
+    }
+
+    fun getMovie(
+        movieId: Long,
+        scope: CoroutineScope,
+        error: (Throwable) -> Unit
+    ): LiveData<Movie> {
+        return liveData(Dispatchers.IO + scope.coroutineContext) {
+            try {
+                emit(service.movieDetails(movieId).toMovie())
+            } catch (t: Throwable) {
+                Timber.i(t)
+                error(t)
             }
         }
     }

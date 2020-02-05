@@ -1,3 +1,18 @@
 package dev.forcetower.cubicrectangle.view.details
 
-interface DetailsContract
+import androidx.annotation.StringRes
+import androidx.lifecycle.LiveData
+import dev.forcetower.cubicrectangle.core.base.BaseContract
+import dev.forcetower.cubicrectangle.model.database.Movie
+import kotlinx.coroutines.CoroutineScope
+
+interface DetailsContract {
+    interface View : BaseContract.View {
+        fun getLifecycleScope(): CoroutineScope
+        fun onLoadError(@StringRes resource: Int)
+    }
+
+    interface Presenter : BaseContract.Presenter<View> {
+        fun loadMovieDetails(movieId: Long): LiveData<Movie>
+    }
+}
