@@ -18,6 +18,6 @@ interface SearchContract {
 
     interface Presenter : BaseContract.Presenter<View> {
         val searchSource: LiveData<PagedList<Movie>>
-        fun search(query: String)
+        fun search(query: String, scope: CoroutineScope? = null)
     }
 }

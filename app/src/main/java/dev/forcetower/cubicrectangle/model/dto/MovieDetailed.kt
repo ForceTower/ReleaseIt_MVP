@@ -21,7 +21,7 @@ data class MovieDetailed(
     @SerializedName("production_companies") val productionCompanies: List<ProductionCompany>?,
     @SerializedName("production_countries") val productionCountries: List<ProductionCountry>?,
     @SerializedName("release_date") val releaseDate: LocalDate?,
-    @SerializedName("revenue") val revenue: Int,
+    @SerializedName("revenue") val revenue: Long,
     @SerializedName("runtime") val runtime: Int,
     @SerializedName("spoken_languages") val spokenLanguages: List<Language>?,
     @SerializedName("status") val status: String,
@@ -29,7 +29,7 @@ data class MovieDetailed(
     @SerializedName("title") val title: String,
     @SerializedName("video") val video: Boolean,
     @SerializedName("vote_average") val voteAverage: Double,
-    @SerializedName("vote_count") val voteCount: Int,
+    @SerializedName("vote_count") val voteCount: Long,
     @SerializedName("release_dates") val releaseDates: ReleaseDates
 )
 

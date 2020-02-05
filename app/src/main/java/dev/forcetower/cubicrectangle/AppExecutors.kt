@@ -17,10 +17,10 @@ class AppExecutors(
 
     @Inject
     constructor() : this(
+        Executors.newFixedThreadPool(1),
         Executors.newFixedThreadPool(2),
-        Executors.newFixedThreadPool(4),
         MainThreadExecutor(),
-        Executors.newFixedThreadPool(5)
+        Executors.newFixedThreadPool(1)
     )
 
     fun diskIO(): Executor {

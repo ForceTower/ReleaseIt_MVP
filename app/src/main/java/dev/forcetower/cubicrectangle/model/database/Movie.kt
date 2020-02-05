@@ -15,7 +15,7 @@ data class Movie(
     val runtime: Int?,
     val posterPath: String?,
     val backdropPath: String?,
-    val voteCount: Int,
+    val voteCount: Long,
     val voteAverage: Double,
     val description: String?,
     val releaseDate: LocalDate?,

@@ -6,7 +6,7 @@ import org.threeten.bp.LocalDate
 data class MovieSimple(
     val popularity: Double,
     @SerializedName("vote_count")
-    val voteCount: Int,
+    val voteCount: Long,
     val video: Boolean,
     @SerializedName("poster_path")
     val posterPath: String?,
@@ -15,9 +15,9 @@ data class MovieSimple(
     @SerializedName("backdrop_path")
     val backdropPath: String?,
     @SerializedName("original_language")
-    val originalLanguage: String,
+    val originalLanguage: String?,
     @SerializedName("original_title")
-    val originalTitle: String,
+    val originalTitle: String?,
     @SerializedName("genre_ids")
     val genreIds: List<Long>,
     val title: String,
@@ -25,5 +25,5 @@ data class MovieSimple(
     val voteAverage: Double,
     val overview: String?,
     @SerializedName("release_date")
-    val releaseDate: LocalDate
+    val releaseDate: LocalDate?
 )
