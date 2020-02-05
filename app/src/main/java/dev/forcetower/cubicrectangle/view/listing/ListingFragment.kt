@@ -12,6 +12,7 @@ import dev.forcetower.cubicrectangle.core.base.BaseFragment
 import dev.forcetower.cubicrectangle.core.base.BaseViewModelFactory
 import dev.forcetower.cubicrectangle.core.model.database.Movie
 import dev.forcetower.cubicrectangle.databinding.FragmentListingBinding
+import dev.forcetower.cubicrectangle.view.common.MoviesAdapter
 import kotlinx.coroutines.CoroutineScope
 import timber.log.Timber
 import javax.inject.Inject
@@ -30,7 +31,7 @@ class ListingFragment : BaseFragment(), ListingContract.View {
     private lateinit var binding: FragmentListingBinding
     private val viewModel by viewModels<ListingViewModel> { factory }
     private val presenter: ListingContract.Presenter
-        get() = viewModel.listingPresenter
+        get() = viewModel.presenter
 
     override fun onCreateView(
         inflater: LayoutInflater,

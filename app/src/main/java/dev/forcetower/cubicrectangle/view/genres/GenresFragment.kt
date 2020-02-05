@@ -6,6 +6,7 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentManager
+import androidx.navigation.fragment.findNavController
 import androidx.viewpager.widget.ViewPager
 import com.google.android.material.tabs.TabLayout
 import dev.forcetower.cubicrectangle.core.base.BaseFragment
@@ -14,7 +15,7 @@ import dev.forcetower.cubicrectangle.core.model.database.Genre
 import dev.forcetower.cubicrectangle.databinding.FragmentGenresBinding
 import dev.forcetower.cubicrectangle.view.listing.ListingFragment
 
-class GenresFragment : BaseFragment() {
+class GenresFragment : BaseFragment(), GenresContract.View {
     private lateinit var binding: FragmentGenresBinding
     private lateinit var viewPager: ViewPager
     private lateinit var tabs: TabLayout
@@ -28,6 +29,8 @@ class GenresFragment : BaseFragment() {
             binding = it
             viewPager = it.pagerGenres
             tabs = it.tabLayout
+        }.apply {
+            contract = this@GenresFragment
         }.root
     }
 
@@ -37,6 +40,11 @@ class GenresFragment : BaseFragment() {
         val adapter = GenreFragmentPagerAdapter(fragments, childFragmentManager)
         viewPager.adapter = adapter
         tabs.setupWithViewPager(viewPager)
+    }
+
+    override fun navigateToSearch() {
+        val direction = GenresFragmentDirections.actionGenresToSearch()
+        findNavController().navigate(direction)
     }
 
     inner class GenreFragmentPagerAdapter(

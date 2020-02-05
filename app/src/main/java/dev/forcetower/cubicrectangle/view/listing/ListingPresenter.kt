@@ -3,9 +3,8 @@ package dev.forcetower.cubicrectangle.view.listing
 import androidx.paging.PagedList
 import dev.forcetower.cubicrectangle.core.model.database.Movie
 import dev.forcetower.cubicrectangle.core.repository.MoviesRepository
-import javax.inject.Inject
 
-class ListingPresenter @Inject constructor(
+class ListingPresenter constructor(
     private val repository: MoviesRepository
 ) : ListingContract.Presenter {
     private var view: ListingContract.View? = null

@@ -8,5 +8,5 @@ import javax.inject.Inject
 // (and view model will override this)
 // Yes, i hate when recyclerview resets current position or the data fetched is lost,
 class ListingViewModel @Inject constructor(
-    val listingPresenter: ListingContract.Presenter
+    val presenter: ListingContract.Presenter
 ) : ViewModel()

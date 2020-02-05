@@ -9,5 +9,14 @@
         android:id="@+id/genres"
         android:name="dev.forcetower.cubicrectangle.view.genres.GenresFragment"
         android:label="Genres"
-        tools:layout="@layout/fragment_genres"/>
+        tools:layout="@layout/fragment_genres">
+        <action
+            android:id="@+id/action_genres_to_search"
+            app:destination="@id/search" />
+    </fragment>
+    <fragment
+        android:id="@+id/search"
+        android:name="dev.forcetower.cubicrectangle.view.search.SearchFragment"
+        android:label="SearchFragment"
+        tools:layout="@layout/fragment_search"/>
 </navigation>

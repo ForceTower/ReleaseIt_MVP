@@ -8,6 +8,7 @@ import dev.forcetower.cubicrectangle.core.model.database.Movie
 import dev.forcetower.cubicrectangle.core.model.database.toMovie
 import dev.forcetower.cubicrectangle.core.services.TMDbService
 import dev.forcetower.cubicrectangle.core.services.datasources.MovieGenreDataSource
+import dev.forcetower.cubicrectangle.core.services.datasources.QueryDataSource
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import timber.log.Timber
@@ -42,7 +43,8 @@ class MoviesRepository @Inject constructor(
         }
     }
 
-    fun search(query: String): LiveData<List<Movie>> {
+    fun searchLive(query: String): LiveData<List<Movie>> {
+
         return liveData(Dispatchers.IO) {
             try {
                 val result = service.searchMovie(query).results
@@ -52,6 +54,20 @@ class MoviesRepository @Inject constructor(
                 Timber.e(t)
             }
         }
+    }
+
+    fun search(query: String, scope: CoroutineScope): PagedList<Movie> {
+        val config = PagedList.Config.Builder()
+            .setPageSize(20)
+            .setEnablePlaceholders(true)
+            .setInitialLoadSizeHint(20)
+            .build()
+
+        val source = QueryDataSource(query, service, scope)
+        return PagedList.Builder(source, config)
+            .setNotifyExecutor(executors.mainThread())
+            .setFetchExecutor(executors.diskIO())
+            .build()
     }
 
     // This is network only. TODO create a database + network

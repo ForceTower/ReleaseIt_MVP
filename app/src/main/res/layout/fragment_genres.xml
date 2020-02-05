@@ -1,6 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
 <layout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto">
+    <data>
+        <variable
+            name="contract"
+            type="dev.forcetower.cubicrectangle.view.genres.GenresContract.View" />
+    </data>
     <androidx.coordinatorlayout.widget.CoordinatorLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent">
@@ -49,6 +54,7 @@
                     android:src="@drawable/ic_search_24dp"
                     android:tint="?attr/colorOnSurface"
                     android:contentDescription="@string/nav_search"
+                    android:onClick="@{() -> contract.navigateToSearch()}"
                     style="@style/Widget.AppCompat.ButtonBar.AlertDialog"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintTop_toTopOf="parent"

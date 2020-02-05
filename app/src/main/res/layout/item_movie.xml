@@ -5,7 +5,7 @@
     <data>
         <variable
             name="contract"
-            type="dev.forcetower.cubicrectangle.view.listing.ListingContract.View" />
+            type="dev.forcetower.cubicrectangle.view.common.MovieClickableContract.View" />
 
         <variable
             name="movie"

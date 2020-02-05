@@ -1,4 +1,4 @@
-package dev.forcetower.cubicrectangle.view.listing
+package dev.forcetower.cubicrectangle.view.common
 
 import android.view.ViewGroup
 import androidx.paging.PagedListAdapter
@@ -10,8 +10,10 @@ import dev.forcetower.cubicrectangle.core.model.database.Movie
 import dev.forcetower.cubicrectangle.databinding.ItemMovieBinding
 
 class MoviesAdapter(
-    private val view: ListingContract.View
-) : PagedListAdapter<Movie, MoviesAdapter.MovieHolder>(DiffCallback) {
+    private val view: MovieClickableContract.View
+) : PagedListAdapter<Movie, MoviesAdapter.MovieHolder>(
+    DiffCallback
+) {
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): MovieHolder {
         return MovieHolder(parent.inflate(R.layout.item_movie), view)
     }
@@ -22,7 +24,7 @@ class MoviesAdapter(
 
     inner class MovieHolder(
         val binding: ItemMovieBinding,
-        view: ListingContract.View
+        view: MovieClickableContract.View
     ) : RecyclerView.ViewHolder(binding.root) {
         init {
             binding.contract = view
