@@ -72,6 +72,7 @@ class ListingFragment : BaseFragment(), ListingContract.View {
     }
 
     override fun shouldApplyTopInsets() = false
+    override fun shouldApplyBottomInsets() = false
 
     companion object {
         fun newInstance(genreId: Long): ListingFragment {

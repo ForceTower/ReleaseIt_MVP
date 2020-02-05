@@ -7,6 +7,7 @@ import dev.forcetower.cubicrectangle.AppExecutors
 import dev.forcetower.cubicrectangle.core.model.database.Movie
 import dev.forcetower.cubicrectangle.core.model.database.toMovie
 import dev.forcetower.cubicrectangle.core.services.TMDbService
+import dev.forcetower.cubicrectangle.core.services.datasources.EmptyDataSource
 import dev.forcetower.cubicrectangle.core.services.datasources.MovieGenreDataSource
 import dev.forcetower.cubicrectangle.core.services.datasources.QueryDataSource
 import kotlinx.coroutines.CoroutineScope
@@ -56,14 +57,18 @@ class MoviesRepository @Inject constructor(
         }
     }
 
-    fun search(query: String, scope: CoroutineScope): PagedList<Movie> {
+    fun search(
+        query: String,
+        scope: CoroutineScope,
+        error: (Throwable) -> Unit
+    ): PagedList<Movie> {
         val config = PagedList.Config.Builder()
             .setPageSize(20)
             .setEnablePlaceholders(true)
             .setInitialLoadSizeHint(20)
             .build()
 
-        val source = QueryDataSource(query, service, scope)
+        val source = QueryDataSource(query, service, scope, error)
         return PagedList.Builder(source, config)
             .setNotifyExecutor(executors.mainThread())
             .setFetchExecutor(executors.diskIO())
@@ -71,15 +76,27 @@ class MoviesRepository @Inject constructor(
     }
 
     // This is network only. TODO create a database + network
-    fun getMoviesByGenre(genre: Long, scope: CoroutineScope): PagedList<Movie> {
+    fun getMoviesByGenre(
+        genre: Long,
+        scope: CoroutineScope,
+        error: (Throwable) -> Unit
+    ): PagedList<Movie> {
         val config = PagedList.Config.Builder()
             .setPageSize(20)
             .setEnablePlaceholders(true)
             .setInitialLoadSizeHint(20)
             .build()
 
-        val source = MovieGenreDataSource(listOf(genre), service, scope)
+        val source = MovieGenreDataSource(listOf(genre), service, scope, error)
         return PagedList.Builder(source, config)
+            .setNotifyExecutor(executors.mainThread())
+            .setFetchExecutor(executors.diskIO())
+            .build()
+    }
+
+    fun <T> emptySource(): PagedList<T> {
+        val source = EmptyDataSource<T>()
+        return PagedList.Builder(source, 1)
             .setNotifyExecutor(executors.mainThread())
             .setFetchExecutor(executors.diskIO())
             .build()

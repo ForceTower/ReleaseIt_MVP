@@ -1,6 +1,7 @@
 package dev.forcetower.cubicrectangle.view.listing
 
 import androidx.paging.PagedList
+import dev.forcetower.cubicrectangle.R
 import dev.forcetower.cubicrectangle.core.model.database.Movie
 import dev.forcetower.cubicrectangle.core.repository.MoviesRepository
 
@@ -19,7 +20,9 @@ class ListingPresenter constructor(
     }
 
     override fun loadMoviesByGenre(genreId: Long): PagedList<Movie> {
-        val src = source ?: repository.getMoviesByGenre(genreId, view!!.getLifecycleScope())
+        val src = source ?: repository.getMoviesByGenre(genreId, view!!.getLifecycleScope()) {
+            view?.onLoadError(R.string.network_error)
+        }
         source = src
         return src
     }

@@ -12,7 +12,8 @@ import timber.log.Timber
 class MovieGenreDataSource(
     genres: List<Long>,
     private val service: TMDbService,
-    private val scope: CoroutineScope
+    private val scope: CoroutineScope,
+    private val error: (Throwable) -> Unit
 ) : PageKeyedDataSource<Int, Movie>() {
     private val genreString = genres.joinToString(",")
 
@@ -22,8 +23,8 @@ class MovieGenreDataSource(
                 val results = service.moviesByGenre(genreString).results
                 callback.onResult(results.map { it.toMovie() }, null, 2)
             } catch (t: Throwable) {
-                Timber.e(t, "Failed loading movies by genre")
-                callback.onError(t)
+                Timber.i(t, "Failed loading movies by genre")
+                error(t)
             }
         }
     }
@@ -35,8 +36,9 @@ class MovieGenreDataSource(
                 val nextPage = if (response.page >= response.totalPages) null else response.page + 1
                 callback.onResult(response.results.map { it.toMovie() }, nextPage)
             } catch (t: Throwable) {
-                Timber.e(t, "Failed loading movies by genre")
+                Timber.i(t, "Failed loading movies by genre")
                 callback.onError(t)
+                error(t)
             }
         }
     }
@@ -48,8 +50,8 @@ class MovieGenreDataSource(
                 val previousPage = if (response.page == 1) null else response.page - 1
                 callback.onResult(response.results.map { it.toMovie() }, previousPage)
             } catch (t: Throwable) {
-                Timber.e(t, "Failed loading movies by genre")
-                callback.onError(t)
+                Timber.i(t, "Failed loading movies by genre")
+                error(t)
             }
         }
     }

@@ -12,6 +12,8 @@ interface SearchContract {
     interface View : MovieClickableContract.View {
         fun getLifecycleScope(): CoroutineScope
         fun onLoadError(@StringRes resource: Int)
+        fun onNavigateBack()
+        fun onClearSearch()
     }
 
     interface Presenter : BaseContract.Presenter<View> {
