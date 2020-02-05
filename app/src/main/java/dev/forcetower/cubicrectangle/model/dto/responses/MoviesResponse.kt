@@ -1,7 +1,7 @@
-package dev.forcetower.cubicrectangle.core.model.dto.responses
+package dev.forcetower.cubicrectangle.model.dto.responses
 
 import com.google.gson.annotations.SerializedName
-import dev.forcetower.cubicrectangle.core.model.dto.MovieSimple
+import dev.forcetower.cubicrectangle.model.dto.MovieSimple
 
 data class MoviesResponse(
     val page: Int,

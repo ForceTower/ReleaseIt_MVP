@@ -6,7 +6,7 @@ import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.RecyclerView
 import dev.forcetower.cubicrectangle.R
 import dev.forcetower.cubicrectangle.core.extensions.inflate
-import dev.forcetower.cubicrectangle.core.model.database.Movie
+import dev.forcetower.cubicrectangle.model.database.Movie
 import dev.forcetower.cubicrectangle.databinding.ItemMovieBinding
 
 class MoviesAdapter(

@@ -4,8 +4,8 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.liveData
 import androidx.paging.PagedList
 import dev.forcetower.cubicrectangle.AppExecutors
-import dev.forcetower.cubicrectangle.core.model.database.Movie
-import dev.forcetower.cubicrectangle.core.model.database.toMovie
+import dev.forcetower.cubicrectangle.model.database.Movie
+import dev.forcetower.cubicrectangle.model.database.toMovie
 import dev.forcetower.cubicrectangle.core.services.TMDbService
 import dev.forcetower.cubicrectangle.core.services.datasources.EmptyDataSource
 import dev.forcetower.cubicrectangle.core.services.datasources.MovieGenreDataSource

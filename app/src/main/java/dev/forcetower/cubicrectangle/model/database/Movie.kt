@@ -1,9 +1,9 @@
-package dev.forcetower.cubicrectangle.core.model.database
+package dev.forcetower.cubicrectangle.model.database
 
 import androidx.room.Entity
 import androidx.room.PrimaryKey
-import dev.forcetower.cubicrectangle.core.model.dto.MovieDetailed
-import dev.forcetower.cubicrectangle.core.model.dto.MovieSimple
+import dev.forcetower.cubicrectangle.model.dto.MovieDetailed
+import dev.forcetower.cubicrectangle.model.dto.MovieSimple
 import org.threeten.bp.LocalDate
 
 @Entity

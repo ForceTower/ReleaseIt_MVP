@@ -1,8 +1,8 @@
 package dev.forcetower.cubicrectangle.core.services
 
-import dev.forcetower.cubicrectangle.core.model.dto.MovieDetailed
-import dev.forcetower.cubicrectangle.core.model.dto.responses.GenresResponse
-import dev.forcetower.cubicrectangle.core.model.dto.responses.MoviesResponse
+import dev.forcetower.cubicrectangle.model.dto.MovieDetailed
+import dev.forcetower.cubicrectangle.model.dto.responses.GenresResponse
+import dev.forcetower.cubicrectangle.model.dto.responses.MoviesResponse
 import retrofit2.http.GET
 import retrofit2.http.Path
 import retrofit2.http.Query

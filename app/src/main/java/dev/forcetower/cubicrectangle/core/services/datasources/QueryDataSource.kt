@@ -1,8 +1,8 @@
 package dev.forcetower.cubicrectangle.core.services.datasources
 
 import androidx.paging.PageKeyedDataSource
-import dev.forcetower.cubicrectangle.core.model.database.Movie
-import dev.forcetower.cubicrectangle.core.model.database.toMovie
+import dev.forcetower.cubicrectangle.model.database.Movie
+import dev.forcetower.cubicrectangle.model.database.toMovie
 import dev.forcetower.cubicrectangle.core.services.TMDbService
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.cancel

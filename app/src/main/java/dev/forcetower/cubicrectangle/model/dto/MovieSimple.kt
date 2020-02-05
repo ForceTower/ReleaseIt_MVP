@@ -1,4 +1,4 @@
-package dev.forcetower.cubicrectangle.core.model.dto
+package dev.forcetower.cubicrectangle.model.dto
 
 import com.google.gson.annotations.SerializedName
 import org.threeten.bp.LocalDate

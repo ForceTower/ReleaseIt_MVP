@@ -10,7 +10,7 @@ import androidx.fragment.app.viewModels
 import androidx.lifecycle.viewModelScope
 import dev.forcetower.cubicrectangle.core.base.BaseFragment
 import dev.forcetower.cubicrectangle.core.base.BaseViewModelFactory
-import dev.forcetower.cubicrectangle.core.model.database.Movie
+import dev.forcetower.cubicrectangle.model.database.Movie
 import dev.forcetower.cubicrectangle.databinding.FragmentListingBinding
 import dev.forcetower.cubicrectangle.view.common.MoviesAdapter
 import kotlinx.coroutines.CoroutineScope

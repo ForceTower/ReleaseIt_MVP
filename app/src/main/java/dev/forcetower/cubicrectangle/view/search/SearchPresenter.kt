@@ -4,7 +4,7 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MediatorLiveData
 import androidx.paging.PagedList
 import dev.forcetower.cubicrectangle.R
-import dev.forcetower.cubicrectangle.core.model.database.Movie
+import dev.forcetower.cubicrectangle.model.database.Movie
 import dev.forcetower.cubicrectangle.core.repository.MoviesRepository
 
 class SearchPresenter(

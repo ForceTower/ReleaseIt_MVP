@@ -1,4 +1,4 @@
-package dev.forcetower.cubicrectangle.core.model.database
+package dev.forcetower.cubicrectangle.model.database
 
 import androidx.room.Entity
 import androidx.room.PrimaryKey

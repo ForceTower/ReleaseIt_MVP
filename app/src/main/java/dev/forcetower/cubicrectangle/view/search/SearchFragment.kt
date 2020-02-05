@@ -15,7 +15,7 @@ import com.google.android.material.snackbar.Snackbar
 import dev.forcetower.cubicrectangle.core.base.BaseFragment
 import dev.forcetower.cubicrectangle.core.base.BaseViewModelFactory
 import dev.forcetower.cubicrectangle.core.extensions.doOnApplyWindowInsets
-import dev.forcetower.cubicrectangle.core.model.database.Movie
+import dev.forcetower.cubicrectangle.model.database.Movie
 import dev.forcetower.cubicrectangle.databinding.FragmentSearchBinding
 import dev.forcetower.cubicrectangle.view.common.MoviesAdapter
 import kotlinx.coroutines.CoroutineScope

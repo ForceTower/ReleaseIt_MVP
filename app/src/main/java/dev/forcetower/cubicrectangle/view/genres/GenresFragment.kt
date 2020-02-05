@@ -11,7 +11,7 @@ import androidx.viewpager.widget.ViewPager
 import com.google.android.material.tabs.TabLayout
 import dev.forcetower.cubicrectangle.core.base.BaseFragment
 import dev.forcetower.cubicrectangle.core.base.BaseFragmentPagerAdapter
-import dev.forcetower.cubicrectangle.core.model.database.Genre
+import dev.forcetower.cubicrectangle.model.database.Genre
 import dev.forcetower.cubicrectangle.databinding.FragmentGenresBinding
 import dev.forcetower.cubicrectangle.view.listing.ListingFragment
 
