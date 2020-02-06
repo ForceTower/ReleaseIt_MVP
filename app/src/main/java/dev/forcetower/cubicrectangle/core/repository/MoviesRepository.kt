@@ -114,11 +114,33 @@ class MoviesRepository @Inject constructor(
             .setInitialLoadSizeHint(20)
             .build()
 
-        val source = MovieGenreDataSource(listOf(genre), service, scope, error)
+        val source = MovieGenreDataSource(listOf(genre), service, scope, error, executors.networkIO())
         return PagedList.Builder(source, config)
             .setNotifyExecutor(executors.mainThread())
             .setFetchExecutor(executors.diskIO())
             .build()
+    }
+
+    fun queryMoviesByGenre(
+        genre: Long,
+        scope: CoroutineScope,
+        error: (Throwable) -> Unit
+    ): Listing<Movie> {
+        val config = getDefaultConfig()
+
+        val source = MovieGenreDataSource(listOf(genre), service, scope, error, executors.networkIO())
+        val list = PagedList.Builder(source, config)
+            .setNotifyExecutor(executors.mainThread())
+            .setFetchExecutor(executors.diskIO())
+            .build()
+
+        return Listing(
+            pagedList = list,
+            networkState = source.networkState,
+            retry = { source.retryAllFailed() },
+            refresh = { source.invalidate() },
+            refreshState = source.initialLoad
+        )
     }
 
     fun <T> emptySource(): Listing<T> {

@@ -7,6 +7,7 @@ import android.view.ViewGroup
 import androidx.annotation.StringRes
 import androidx.core.os.bundleOf
 import androidx.fragment.app.viewModels
+import androidx.lifecycle.Observer
 import androidx.lifecycle.viewModelScope
 import androidx.navigation.fragment.findNavController
 import dev.forcetower.cubicrectangle.core.base.BaseFragment
@@ -51,6 +52,10 @@ class ListingFragment : BaseFragment(), ListingContract.View {
         binding.apply {
             recyclerMovies.adapter = adapter
         }
+        presenter.currentState.observe(viewLifecycleOwner, Observer { Unit })
+        binding.labelError.setOnClickListener {
+            presenter.retry()
+        }
         adapter.submitList(presenter.loadMoviesByGenre(requireArguments().getLong("genre_id")))
     }
 
@@ -66,6 +71,24 @@ class ListingFragment : BaseFragment(), ListingContract.View {
 
     override fun onLoadError(@StringRes resource: Int) {
         showSnack(getString(resource))
+    }
+
+    override fun moveToErrorState() {
+        binding.labelError.visibility = View.VISIBLE
+        binding.labelLoading.visibility = View.GONE
+        binding.recyclerMovies.visibility = View.GONE
+    }
+
+    override fun moveToLoadingState() {
+        binding.labelError.visibility = View.GONE
+        binding.labelLoading.visibility = View.VISIBLE
+        binding.recyclerMovies.visibility = View.GONE
+    }
+
+    override fun moveToListingState() {
+        binding.labelError.visibility = View.GONE
+        binding.labelLoading.visibility = View.GONE
+        binding.recyclerMovies.visibility = View.VISIBLE
     }
 
     override fun onDestroy() {
