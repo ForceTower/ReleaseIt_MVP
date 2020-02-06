@@ -11,7 +11,9 @@ import kotlinx.coroutines.CoroutineScope
 interface ListingContract {
     interface View : MovieClickableContract.View {
         fun getLifecycleScope(): CoroutineScope
-        fun onLoadError(@StringRes resource: Int)
+        fun onLoadError(@StringRes resource: Int) {
+            println("called")
+        }
         fun moveToErrorState()
         fun moveToLoadingState()
         fun moveToListingState()
@@ -20,7 +22,7 @@ interface ListingContract {
 
     interface Presenter : BaseContract.Presenter<View> {
         val listing: LiveData<PagedList<Movie>>
-        fun loadMoviesByGenre(genreId: Long)
+        fun loadMoviesByGenre(genreId: Long, scope: CoroutineScope? = null)
         fun retry()
         fun refresh()
     }

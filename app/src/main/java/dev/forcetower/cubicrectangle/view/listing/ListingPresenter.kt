@@ -4,10 +4,12 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MediatorLiveData
 import androidx.lifecycle.switchMap
 import androidx.paging.PagedList
-import dev.forcetower.cubicrectangle.model.database.Movie
+import dev.forcetower.cubicrectangle.R
 import dev.forcetower.cubicrectangle.core.repository.MoviesRepository
 import dev.forcetower.cubicrectangle.core.services.datasources.helpers.Listing
 import dev.forcetower.cubicrectangle.core.services.datasources.helpers.Status
+import dev.forcetower.cubicrectangle.model.database.Movie
+import kotlinx.coroutines.CoroutineScope
 
 class ListingPresenter constructor(
     private val repository: MoviesRepository
@@ -23,7 +25,6 @@ class ListingPresenter constructor(
 
     init {
         _genreSource.addSource(networkState) { change ->
-            change ?: return@addSource
             if (change.status == Status.FAILED && listing.value.isNullOrEmpty()) {
                 view?.moveToErrorState()
             } else if (change.status == Status.RUNNING && listing.value.isNullOrEmpty()) {
@@ -31,7 +32,6 @@ class ListingPresenter constructor(
             } else {
                 view?.moveToListingState()
             }
-            Unit
         }
         _genreSource.addSource(refreshState) { change ->
             if (change?.status == Status.RUNNING) {
@@ -54,11 +54,11 @@ class ListingPresenter constructor(
         _genreSource.value?.refresh?.invoke()
     }
 
-    override fun loadMoviesByGenre(genreId: Long) {
+    override fun loadMoviesByGenre(genreId: Long, scope: CoroutineScope?) {
         if (lastGenre == genreId) return
         lastGenre = genreId
-        _genreSource.value = repository.queryMoviesByGenre(genreId, view!!.getLifecycleScope()) {
-            // view?.onLoadError(R.string.network_error)
+        _genreSource.value = repository.queryMoviesByGenre(genreId, scope ?: view!!.getLifecycleScope()) {
+            view?.onLoadError(R.string.network_error)
         }
     }
 

@@ -8,7 +8,6 @@ import kotlinx.coroutines.ExperimentalCoroutinesApi
 import org.mockito.ArgumentCaptor
 import org.mockito.Captor
 
-
 @ExperimentalCoroutinesApi
 open class BaseListingPresenterTest : BaseTest() {
     @Captor

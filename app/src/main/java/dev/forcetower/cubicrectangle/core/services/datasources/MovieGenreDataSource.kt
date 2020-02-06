@@ -45,7 +45,6 @@ class MovieGenreDataSource(
                 initialLoad.postValue(NetworkState.LOADED)
                 callback.onResult(results.map { it.toMovie() }, null, 2)
             } catch (t: Throwable) {
-                Timber.i(t, "Failed loading movies by genre")
                 error(t)
                 retry = {
                     loadInitial(params, callback)
@@ -71,7 +70,6 @@ class MovieGenreDataSource(
                     loadAfter(params, callback)
                 }
                 networkState.postValue(NetworkState.error(t.message ?: "unknown err"))
-                Timber.i(t, "Failed loading movies by genre")
                 error(t)
             }
         }
@@ -91,7 +89,6 @@ class MovieGenreDataSource(
                     loadBefore(params, callback)
                 }
                 networkState.postValue(NetworkState.error(t.message ?: "unknown err"))
-                Timber.i(t, "Failed loading movies by genre")
                 error(t)
             }
         }

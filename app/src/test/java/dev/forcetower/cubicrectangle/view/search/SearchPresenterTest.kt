@@ -20,7 +20,7 @@ import org.mockito.MockitoAnnotations
 class SearchPresenterTest : BaseListingPresenterTest() {
     @Mock
     private lateinit var view: SearchContract.View
-    private lateinit var presenter: SearchPresenter
+    private lateinit var presenter: SearchContract.Presenter
 
     @Before
     fun setup() {
