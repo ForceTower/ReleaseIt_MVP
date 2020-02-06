@@ -51,7 +51,7 @@ class SearchPresenterTest {
         MockitoAnnotations.initMocks(this)
         presenter = SearchPresenter(repository)
         presenter.attach(view)
-        presenter.searchSource.observeForever(observer)
+        presenter.listing.observeForever(observer)
     }
 
     @Test

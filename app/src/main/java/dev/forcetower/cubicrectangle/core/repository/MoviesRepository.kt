@@ -62,6 +62,7 @@ class MoviesRepository @Inject constructor(
         }
     }
 
+    @Deprecated("This method is simpler, but doesn't offer error handle")
     fun search(
         query: String,
         scope: CoroutineScope,
