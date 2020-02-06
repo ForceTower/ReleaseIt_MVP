@@ -14,7 +14,6 @@ import androidx.core.view.WindowInsetsCompat
 import androidx.databinding.DataBindingUtil
 import androidx.databinding.ViewDataBinding
 import androidx.recyclerview.widget.RecyclerView
-import timber.log.Timber
 
 fun View.inflater(): LayoutInflater = LayoutInflater.from(context)
 
