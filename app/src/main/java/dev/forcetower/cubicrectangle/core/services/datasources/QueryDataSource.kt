@@ -86,7 +86,7 @@ class QueryDataSource(
                 callback.onResult(response.results.map { it.toMovie() }, previousPage)
             } catch (t: Throwable) {
                 retry = {
-                    loadAfter(params, callback)
+                    loadBefore(params, callback)
                 }
                 networkState.postValue(NetworkState.error(t.message ?: "unknown err"))
                 Timber.i(t, "Failed loading movies by genre")
