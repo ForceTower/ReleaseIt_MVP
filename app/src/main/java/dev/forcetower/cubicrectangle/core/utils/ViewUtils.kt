@@ -1,17 +1,22 @@
 package dev.forcetower.cubicrectangle.core.utils
 
+import android.content.Context
 import android.content.res.ColorStateList
+import android.content.res.Configuration
+import android.content.res.Resources
 import android.graphics.Color
 import android.graphics.drawable.ColorDrawable
 import android.graphics.drawable.Drawable
 import android.graphics.drawable.RippleDrawable
 import android.os.Build
+import android.util.DisplayMetrics
 import android.util.Property
 import android.view.View
 import androidx.annotation.ColorInt
 import androidx.annotation.FloatRange
 import androidx.palette.graphics.Palette
 import dev.forcetower.cubicrectangle.core.utils.ColorUtils.modifyAlpha
+
 
 object ViewUtils {
     val DRAWABLE_ALPHA: Property<Drawable, Int> =
@@ -24,6 +29,16 @@ object ViewUtils {
                 return `object`.alpha
             }
         })
+
+    @JvmStatic
+    fun isNavBarOnBottom(context: Context): Boolean {
+        val res: Resources = context.resources
+        val cfg: Configuration = context.resources.configuration
+        val dm: DisplayMetrics = res.displayMetrics
+        val canMove = dm.widthPixels != dm.heightPixels &&
+                cfg.smallestScreenWidthDp < 600
+        return !canMove || dm.widthPixels < dm.heightPixels
+    }
 
     fun createRipple(
         palette: Palette?,

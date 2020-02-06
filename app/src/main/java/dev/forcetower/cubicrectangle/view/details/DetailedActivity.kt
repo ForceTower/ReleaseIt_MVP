@@ -18,6 +18,7 @@ import dev.forcetower.cubicrectangle.core.base.BaseViewModelFactory
 import dev.forcetower.cubicrectangle.core.bindings.ImageLoadListener
 import dev.forcetower.cubicrectangle.core.extensions.getBitmap
 import dev.forcetower.cubicrectangle.core.extensions.postponeEnterTransition
+import dev.forcetower.cubicrectangle.core.ui.widget.ElasticDragDismissFrameAlternative
 import dev.forcetower.cubicrectangle.core.ui.widget.ElasticDragDismissFrameLayout
 import dev.forcetower.cubicrectangle.core.utils.AnimUtils.getFastOutSlowInInterpolator
 import dev.forcetower.cubicrectangle.core.utils.ColorUtils
@@ -27,7 +28,7 @@ import kotlinx.coroutines.CoroutineScope
 import javax.inject.Inject
 
 class DetailedActivity : BaseActivity(), DetailsContract.View {
-    private lateinit var chromeFader: ElasticDragDismissFrameLayout.SystemChromeFader
+    private lateinit var chromeFader: ElasticDragDismissFrameAlternative.SystemChromeFader
     @Inject
     lateinit var factory: BaseViewModelFactory
     private lateinit var binding: ActivityDetailsBinding
@@ -75,7 +76,7 @@ class DetailedActivity : BaseActivity(), DetailsContract.View {
 
         binding.imageListener = headLoadListener
 
-        chromeFader = object : ElasticDragDismissFrameLayout.SystemChromeFader(this) {
+        chromeFader = object : ElasticDragDismissFrameAlternative.SystemChromeFader(this) {
             override fun onDragDismissed() {
                 finishAfterTransition()
             }

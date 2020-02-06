@@ -11,7 +11,7 @@
             name="imageListener"
             type="dev.forcetower.cubicrectangle.core.bindings.ImageLoadListener"/>
     </data>
-    <dev.forcetower.cubicrectangle.core.ui.widget.ElasticDragDismissFrameLayout
+    <dev.forcetower.cubicrectangle.core.ui.widget.ElasticDragDismissFrameAlternative
         android:id="@+id/draggable_frame"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
@@ -123,5 +123,5 @@
 
             </androidx.constraintlayout.widget.ConstraintLayout>
         </androidx.core.widget.NestedScrollView>
-    </dev.forcetower.cubicrectangle.core.ui.widget.ElasticDragDismissFrameLayout>
+    </dev.forcetower.cubicrectangle.core.ui.widget.ElasticDragDismissFrameAlternative>
 </layout>
