@@ -8,8 +8,6 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.annotation.StringRes
-import androidx.core.view.updatePadding
-import androidx.core.view.updatePaddingRelative
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.Observer
 import androidx.lifecycle.viewModelScope
@@ -25,7 +23,6 @@ import com.google.android.material.snackbar.Snackbar
 import dev.forcetower.cubicrectangle.R
 import dev.forcetower.cubicrectangle.core.base.BaseFragment
 import dev.forcetower.cubicrectangle.core.base.BaseViewModelFactory
-import dev.forcetower.cubicrectangle.core.extensions.doOnApplyWindowInsets
 import dev.forcetower.cubicrectangle.core.extensions.fadeIn
 import dev.forcetower.cubicrectangle.databinding.FragmentDetailsBinding
 import dev.forcetower.cubicrectangle.model.database.Movie
@@ -62,13 +59,6 @@ class DetailsFragment : BaseFragment(), DetailsContract.View {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        view.doOnApplyWindowInsets { v, insets, padding ->
-            Timber.d("YASSS ${insets.systemWindowInsetBottom}")
-            v.updatePaddingRelative(bottom = padding.bottom + insets.systemWindowInsetBottom)
-        }
-        view.doOnApplyWindowInsets { v, insets, padding ->
-            v.updatePadding(top = padding.top + insets.systemWindowInsetTop)
-        }
 
         presenter.loadMovieDetails(args.movieId).observe(viewLifecycleOwner, Observer {
             onMovieUpdate(it)
@@ -117,9 +107,6 @@ class DetailsFragment : BaseFragment(), DetailsContract.View {
     override fun onNavigateBack() {
         findNavController().popBackStack()
     }
-
-    override fun shouldApplyBottomInsets() = false
-    override fun shouldApplyTopInsets() = false
 
     override fun onDestroy() {
         presenter.onDestroy()

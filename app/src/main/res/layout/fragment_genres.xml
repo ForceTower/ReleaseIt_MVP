@@ -15,6 +15,9 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:paddingBottom="2dp"
+            app:paddingEndSystemWindowInsets="@{true}"
+            app:paddingStartSystemWindowInsets="@{true}"
+            app:paddingTopSystemWindowInsets="@{true}"
             app:liftOnScroll="@bool/not_on_night_mode"
             style="@style/Widget.MaterialComponents.AppBarLayout.Surface">
 

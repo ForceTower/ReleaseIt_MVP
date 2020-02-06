@@ -56,6 +56,8 @@ class GenresFragment : BaseFragment(), GenresContract.View {
         }
     }
 
+    override fun shouldApplyInsets() = false
+
     companion object {
         val genres = listOf(
             Genre(28L, "Ação"),

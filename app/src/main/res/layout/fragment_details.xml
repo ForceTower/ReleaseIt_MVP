@@ -15,7 +15,11 @@
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        tools:background="#42a5f5">
+        tools:background="#42a5f5"
+        app:paddingBottomSystemWindowInsets="@{true}"
+        app:paddingTopSystemWindowInsets="@{true}"
+        app:paddingStartSystemWindowInsets="@{true}"
+        app:paddingEndSystemWindowInsets="@{true}">
 
         <com.bosphere.fadingedgelayout.FadingEdgeLayout
             android:id="@+id/fading_edge_container"

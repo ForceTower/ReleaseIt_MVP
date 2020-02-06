@@ -5,12 +5,11 @@ import android.util.TypedValue
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.view.WindowInsets
 import android.view.animation.AnimationUtils
 import android.view.inputmethod.InputMethodManager
 import androidx.annotation.LayoutRes
 import androidx.core.content.ContextCompat
-import androidx.core.view.ViewCompat
-import androidx.core.view.WindowInsetsCompat
 import androidx.databinding.DataBindingUtil
 import androidx.databinding.ViewDataBinding
 import androidx.recyclerview.widget.RecyclerView
@@ -61,11 +60,10 @@ fun View.openKeyboard() {
     service?.showSoftInput(this, 0)
 }
 
-fun View.doOnApplyWindowInsets(f: (View, WindowInsetsCompat, ViewPaddingState) -> Unit) {
-    // Create a snapshot of the view's padding state
-    val paddingState = createStateForView(this)
-    ViewCompat.setOnApplyWindowInsetsListener(this) { v, insets ->
-        f(v, insets, paddingState)
+fun View.doOnApplyWindowInsets(f: (View, WindowInsets, InitialPadding) -> Unit) {
+    val initialPadding = recordInitialPaddingForView(this)
+    setOnApplyWindowInsetsListener { v, insets ->
+        f(v, insets, initialPadding)
         insets
     }
     requestApplyInsetsWhenAttached()
@@ -77,6 +75,16 @@ fun View.fadeIn() {
     startAnimation(fadeInAnim)
     requestLayout()
 }
+
+data class InitialPadding(
+    val left: Int,
+    val top: Int,
+    val right: Int,
+    val bottom: Int
+)
+
+private fun recordInitialPaddingForView(view: View) = InitialPadding(
+    view.paddingLeft, view.paddingTop, view.paddingRight, view.paddingBottom)
 
 fun View.requestApplyInsetsWhenAttached() {
     if (isAttachedToWindow) {
@@ -91,15 +99,3 @@ fun View.requestApplyInsetsWhenAttached() {
         })
     }
 }
-
-private fun createStateForView(view: View) = ViewPaddingState(view.paddingLeft,
-        view.paddingTop, view.paddingRight, view.paddingBottom, view.paddingStart, view.paddingEnd)
-
-data class ViewPaddingState(
-    val left: Int,
-    val top: Int,
-    val right: Int,
-    val bottom: Int,
-    val start: Int,
-    val end: Int
-)

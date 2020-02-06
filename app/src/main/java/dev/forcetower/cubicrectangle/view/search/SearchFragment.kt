@@ -5,7 +5,6 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.annotation.StringRes
-import androidx.core.view.updatePadding
 import androidx.core.widget.doAfterTextChanged
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.Observer
@@ -14,7 +13,7 @@ import androidx.navigation.fragment.findNavController
 import com.google.android.material.snackbar.Snackbar
 import dev.forcetower.cubicrectangle.core.base.BaseFragment
 import dev.forcetower.cubicrectangle.core.base.BaseViewModelFactory
-import dev.forcetower.cubicrectangle.core.extensions.doOnApplyWindowInsets
+import dev.forcetower.cubicrectangle.core.extensions.requestApplyInsetsWhenAttached
 import dev.forcetower.cubicrectangle.model.database.Movie
 import dev.forcetower.cubicrectangle.databinding.FragmentSearchBinding
 import dev.forcetower.cubicrectangle.view.common.MoviesAdapter
@@ -49,14 +48,6 @@ class SearchFragment : BaseFragment(), SearchContract.View {
             recyclerMovies.adapter = adapter
         }
 
-        binding.appBar.doOnApplyWindowInsets { v, insets, padding ->
-            v.updatePadding(top = padding.top + insets.systemWindowInsetTop)
-        }
-
-        binding.recyclerMovies.doOnApplyWindowInsets { v, insets, padding ->
-            v.updatePadding(bottom = padding.bottom + insets.systemWindowInsetBottom)
-        }
-
         presenter.searchSource.observe(viewLifecycleOwner, Observer {
             adapter.submitList(it)
         })
@@ -64,6 +55,11 @@ class SearchFragment : BaseFragment(), SearchContract.View {
         binding.editQuery.doAfterTextChanged { text ->
             presenter.search(text.toString())
         }
+    }
+
+    override fun onStart() {
+        super.onStart()
+        view?.requestApplyInsetsWhenAttached()
     }
 
     override fun getLifecycleScope(): CoroutineScope {
@@ -92,6 +88,5 @@ class SearchFragment : BaseFragment(), SearchContract.View {
         super.onDestroy()
     }
 
-    override fun shouldApplyBottomInsets() = false
-    override fun shouldApplyTopInsets() = false
+    override fun shouldApplyInsets() = false
 }

@@ -73,8 +73,7 @@ class ListingFragment : BaseFragment(), ListingContract.View {
         super.onDestroy()
     }
 
-    override fun shouldApplyTopInsets() = false
-    override fun shouldApplyBottomInsets() = false
+    override fun shouldApplyInsets() = false
 
     companion object {
         fun newInstance(genreId: Long): ListingFragment {

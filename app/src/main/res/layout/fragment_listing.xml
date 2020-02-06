@@ -10,6 +10,9 @@
         android:padding="4dp"
         android:paddingBottom="16dp"
         android:clipToPadding="false"
+        app:paddingBottomSystemWindowInsets="@{true}"
+        app:paddingStartSystemWindowInsets="@{true}"
+        app:paddingEndSystemWindowInsets="@{true}"
         app:layoutManager="androidx.recyclerview.widget.GridLayoutManager"
         app:spanCount="@integer/fragment_listing_span_count"
         tools:listitem="@layout/item_movie"/>

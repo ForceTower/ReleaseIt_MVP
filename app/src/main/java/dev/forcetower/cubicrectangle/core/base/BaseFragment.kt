@@ -4,7 +4,6 @@ import android.os.Bundle
 import android.view.View
 import androidx.annotation.CallSuper
 import androidx.core.view.updatePadding
-import androidx.core.view.updatePaddingRelative
 import com.google.android.material.internal.ViewUtils.requestApplyInsetsWhenAttached
 import com.google.android.material.snackbar.Snackbar
 import dagger.android.support.DaggerFragment
@@ -15,14 +14,15 @@ import timber.log.Timber
 abstract class BaseFragment : DaggerFragment() {
     @CallSuper
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        if (shouldApplyBottomInsets()) {
+        if (shouldApplyInsets()) {
             view.doOnApplyWindowInsets { v, insets, padding ->
-                v.updatePaddingRelative(bottom = padding.bottom + insets.systemWindowInsetBottom)
-            }
-        }
-        if (shouldApplyTopInsets()) {
-            view.doOnApplyWindowInsets { v, insets, padding ->
-                v.updatePadding(top = padding.top + insets.systemWindowInsetTop)
+                Timber.d("Base insets bottom ${insets.systemWindowInsetBottom} ${javaClass.simpleName}")
+                v.updatePadding(
+                    bottom = padding.bottom + insets.systemWindowInsetBottom,
+                    top = padding.top + insets.systemWindowInsetTop,
+                    left = padding.left + insets.systemWindowInsetLeft,
+                    right = padding.right + insets.systemWindowInsetRight
+                )
             }
         }
     }
@@ -52,6 +52,5 @@ abstract class BaseFragment : DaggerFragment() {
         view?.requestApplyInsetsWhenAttached()
     }
 
-    open fun shouldApplyBottomInsets() = true
-    open fun shouldApplyTopInsets() = true
+    open fun shouldApplyInsets() = false
 }
