@@ -10,6 +10,7 @@ interface DetailsContract {
     interface View : BaseContract.View {
         fun getLifecycleScope(): CoroutineScope
         fun onLoadError(@StringRes resource: Int)
+        fun onNavigateBack()
     }
 
     interface Presenter : BaseContract.Presenter<View> {

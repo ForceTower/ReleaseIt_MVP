@@ -6,6 +6,17 @@
     <string name="nav_search">Search</string>
     <string name="cancel_search">Cancel search</string>
     <string name="clear_search">Clear search</string>
-    <string name="search_movies">Pesquisar filmes</string>
-    <string name="network_error">Erro de conexão</string>
+    <string name="search_movies">Search movies</string>
+    <string name="network_error">Connection error</string>
+    <string name="title_poster">Movie poster</string>
+    <string name="like_count">Likes</string>
+    <string name="title_launch_date">Launch date</string>
+    <string name="title_runtime_format">%1$d min</string>
+    <string name="details_current_page">%1$d</string>
+    <string name="back">Back</string>
+    <string name="back_button">Back</string>
+    <string name="title_rating">Score</string>
+    <string name="title_like_format">%1$d</string>
+    <string name="unknown_runtime">\??? min</string>
+    <string name="title_score">%1$.1f</string>
 </resources>

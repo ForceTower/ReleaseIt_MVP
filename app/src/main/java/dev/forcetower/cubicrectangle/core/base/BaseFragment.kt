@@ -5,9 +5,11 @@ import android.view.View
 import androidx.annotation.CallSuper
 import androidx.core.view.updatePadding
 import androidx.core.view.updatePaddingRelative
+import com.google.android.material.internal.ViewUtils.requestApplyInsetsWhenAttached
 import com.google.android.material.snackbar.Snackbar
 import dagger.android.support.DaggerFragment
 import dev.forcetower.cubicrectangle.core.extensions.doOnApplyWindowInsets
+import dev.forcetower.cubicrectangle.core.extensions.requestApplyInsetsWhenAttached
 import timber.log.Timber
 
 abstract class BaseFragment : DaggerFragment() {
@@ -42,6 +44,12 @@ abstract class BaseFragment : DaggerFragment() {
             Timber.i("Not part of UActivity")
             null
         }
+    }
+
+    @CallSuper
+    override fun onStart() {
+        super.onStart()
+        view?.requestApplyInsetsWhenAttached()
     }
 
     open fun shouldApplyBottomInsets() = true

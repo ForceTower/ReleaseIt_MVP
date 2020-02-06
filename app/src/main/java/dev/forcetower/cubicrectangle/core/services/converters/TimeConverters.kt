@@ -7,8 +7,19 @@ import org.threeten.bp.LocalDate
 import org.threeten.bp.ZoneId
 import org.threeten.bp.ZonedDateTime
 import org.threeten.bp.format.DateTimeFormatter
+import android.annotation.SuppressLint
+import java.util.Locale
 
-object ObjectConverters {
+private const val formatPattern = "d 'de' MMMM 'de' yyyy"
+
+@SuppressLint("ConstantLocale")
+val FORMATTER_MONTH_DAY: DateTimeFormatter =
+    DateTimeFormatter.ofPattern(formatPattern, Locale.getDefault())
+
+object TimeConverters {
+    @JvmStatic
+    fun convertToDayYearFormat(date: LocalDate?): String? = if (date != null) FORMATTER_MONTH_DAY.format(date) else null
+
     @JvmStatic
     val ZDT_DESERIALIZER: JsonDeserializer<ZonedDateTime> = JsonDeserializer { json, _, _ ->
         val jsonPrimitive = json.asJsonPrimitive

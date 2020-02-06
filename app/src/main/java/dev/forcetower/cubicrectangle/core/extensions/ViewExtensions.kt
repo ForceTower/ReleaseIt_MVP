@@ -14,6 +14,7 @@ import androidx.core.view.WindowInsetsCompat
 import androidx.databinding.DataBindingUtil
 import androidx.databinding.ViewDataBinding
 import androidx.recyclerview.widget.RecyclerView
+import timber.log.Timber
 
 fun View.inflater(): LayoutInflater = LayoutInflater.from(context)
 
@@ -54,6 +55,11 @@ fun Context.getAttribute(attr: Int): Int {
 fun View.closeKeyboard() {
     val service = ContextCompat.getSystemService(context, InputMethodManager::class.java)
     service?.hideSoftInputFromWindow(windowToken, 0)
+}
+
+fun View.openKeyboard() {
+    val service = ContextCompat.getSystemService(context, InputMethodManager::class.java)
+    service?.showSoftInput(this, 0)
 }
 
 fun View.doOnApplyWindowInsets(f: (View, WindowInsetsCompat, ViewPaddingState) -> Unit) {

@@ -9,7 +9,7 @@ import dev.forcetower.cubicrectangle.BuildConfig
 import dev.forcetower.cubicrectangle.Constants
 import dev.forcetower.cubicrectangle.CubicApp
 import dev.forcetower.cubicrectangle.core.services.TMDbService
-import dev.forcetower.cubicrectangle.core.services.converters.ObjectConverters
+import dev.forcetower.cubicrectangle.core.services.converters.TimeConverters
 import okhttp3.Interceptor
 import okhttp3.OkHttpClient
 import okhttp3.Response
@@ -77,8 +77,8 @@ object AppModule {
     @Singleton
     fun provideGson(): Gson {
         return GsonBuilder()
-            .registerTypeAdapter(ZonedDateTime::class.java, ObjectConverters.ZDT_DESERIALIZER)
-            .registerTypeAdapter(LocalDate::class.java, ObjectConverters.LD_DESERIALIZER)
+            .registerTypeAdapter(ZonedDateTime::class.java, TimeConverters.ZDT_DESERIALIZER)
+            .registerTypeAdapter(LocalDate::class.java, TimeConverters.LD_DESERIALIZER)
             .serializeNulls()
             .create()
     }

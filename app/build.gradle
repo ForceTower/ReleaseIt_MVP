@@ -119,6 +119,9 @@ dependencies {
     // Date time
     implementation "com.jakewharton.threetenabp:threetenabp:$zoned_time_date"
 
+    // Fading Edge
+    implementation("com.github.bosphere.android-fadingedgelayout:fadingedgelayout:1.0.0")
+
     testImplementation "junit:junit:4.12"
     testImplementation "org.mockito:mockito-core:2.28.2"
     testImplementation "org.mockito:mockito-inline:2.28.2"
