@@ -2,13 +2,18 @@ package dev.forcetower.cubicrectangle.core.repository
 
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.liveData
+import androidx.lifecycle.switchMap
 import androidx.paging.PagedList
+import androidx.paging.toLiveData
 import dev.forcetower.cubicrectangle.AppExecutors
 import dev.forcetower.cubicrectangle.core.services.TMDbService
 import dev.forcetower.cubicrectangle.core.services.datasources.EmptyDataSource
 import dev.forcetower.cubicrectangle.core.services.datasources.MovieGenreDataSource
 import dev.forcetower.cubicrectangle.core.services.datasources.QueryDataSource
+import dev.forcetower.cubicrectangle.core.services.datasources.factory.QueryDataSourceFactory
 import dev.forcetower.cubicrectangle.core.services.datasources.helpers.Listing
+import dev.forcetower.cubicrectangle.core.services.datasources.helpers.ListingTwo
+import dev.forcetower.cubicrectangle.core.ui.lifecycle.EmptyLiveData
 import dev.forcetower.cubicrectangle.model.database.Movie
 import dev.forcetower.cubicrectangle.model.database.toMovie
 import kotlinx.coroutines.CoroutineScope
@@ -86,18 +91,26 @@ class MoviesRepository @Inject constructor(
         scope: CoroutineScope,
         error: (Throwable) -> Unit
     ): Listing<Movie> {
-        val source = QueryDataSource(query, service, scope, error, executors.networkIO())
-        val list = PagedList.Builder(source, getDefaultConfig())
-            .setNotifyExecutor(executors.mainThread())
-            .setFetchExecutor(executors.networkIO())
-            .build()
+        val factory = QueryDataSourceFactory(query, service, scope, error, executors.networkIO())
+        val livePagedList = factory.toLiveData(
+            pageSize = 20,
+            fetchExecutor = executors.networkIO()
+        )
+        val refreshState = factory.sourceLiveData.switchMap {
+            it.initialLoad
+        }
 
-        val refreshState = source.initialLoad
         return Listing(
-            pagedList = list,
-            networkState = source.networkState,
-            retry = { source.retryAllFailed() },
-            refresh = { source.invalidate() },
+            pagedList = livePagedList,
+            networkState = factory.sourceLiveData.switchMap {
+                it.networkState
+            },
+            retry = {
+                factory.sourceLiveData.value?.retryAllFailed()
+            },
+            refresh = {
+                factory.sourceLiveData.value?.invalidate()
+            },
             refreshState = refreshState
         )
     }
@@ -125,7 +138,7 @@ class MoviesRepository @Inject constructor(
         genre: Long,
         scope: CoroutineScope,
         error: (Throwable) -> Unit
-    ): Listing<Movie> {
+    ): ListingTwo<Movie> {
         val config = getDefaultConfig()
 
         val source = MovieGenreDataSource(listOf(genre), service, scope, error, executors.networkIO())
@@ -134,7 +147,7 @@ class MoviesRepository @Inject constructor(
             .setFetchExecutor(executors.diskIO())
             .build()
 
-        return Listing(
+        return ListingTwo(
             pagedList = list,
             networkState = source.networkState,
             retry = { source.retryAllFailed() },
@@ -143,19 +156,29 @@ class MoviesRepository @Inject constructor(
         )
     }
 
-    fun <T> emptySource(): Listing<T> {
+    fun <T> emptySource(): ListingTwo<T> {
         val source = EmptyDataSource<T>()
         val list = PagedList.Builder(source, getDefaultConfig())
             .setNotifyExecutor(executors.mainThread())
             .setFetchExecutor(executors.networkIO())
             .build()
 
-        return Listing(
+        return ListingTwo(
             pagedList = list,
             networkState = null,
             retry = {},
             refresh = {},
             refreshState = null
+        )
+    }
+
+    fun <T> emptySource2(): Listing<T> {
+        return Listing(
+            pagedList = EmptyLiveData.create(),
+            networkState = EmptyLiveData.create(),
+            retry = {},
+            refresh = {},
+            refreshState = EmptyLiveData.create()
         )
     }
 

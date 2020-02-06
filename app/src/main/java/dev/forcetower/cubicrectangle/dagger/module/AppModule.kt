@@ -66,7 +66,7 @@ object AppModule {
             .addInterceptor(interceptor)
             .addInterceptor(HttpLoggingInterceptor().apply {
                 level = if (BuildConfig.DEBUG)
-                    HttpLoggingInterceptor.Level.NONE
+                    HttpLoggingInterceptor.Level.BASIC
                 else
                     HttpLoggingInterceptor.Level.NONE
             })

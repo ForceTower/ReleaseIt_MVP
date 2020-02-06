@@ -3,14 +3,14 @@ package dev.forcetower.cubicrectangle.core.services.datasources.helpers
 import androidx.lifecycle.LiveData
 import androidx.paging.PagedList
 
-data class Listing<T>(
+data class ListingTwo<T>(
     // the LiveData of paged lists for the UI to observe
-    val pagedList: LiveData<PagedList<T>>,
+    val pagedList: PagedList<T>,
     // represents the network request status to show to the user
-    val networkState: LiveData<NetworkState>,
+    val networkState: LiveData<NetworkState>?,
     // represents the refresh status to show to the user. Separate from networkState, this
     // value is importantly only when refresh is requested.
-    val refreshState: LiveData<NetworkState>,
+    val refreshState: LiveData<NetworkState>?,
     // refreshes the whole data and fetches it from scratch.
     val refresh: () -> Unit,
     // retries any failed requests.

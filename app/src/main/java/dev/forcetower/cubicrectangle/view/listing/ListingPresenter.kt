@@ -6,7 +6,7 @@ import androidx.paging.PagedList
 import dev.forcetower.cubicrectangle.R
 import dev.forcetower.cubicrectangle.model.database.Movie
 import dev.forcetower.cubicrectangle.core.repository.MoviesRepository
-import dev.forcetower.cubicrectangle.core.services.datasources.helpers.Listing
+import dev.forcetower.cubicrectangle.core.services.datasources.helpers.ListingTwo
 import dev.forcetower.cubicrectangle.core.services.datasources.helpers.NetworkState
 import dev.forcetower.cubicrectangle.core.services.datasources.helpers.Status
 
@@ -14,7 +14,7 @@ class ListingPresenter constructor(
     private val repository: MoviesRepository
 ) : ListingContract.Presenter {
     private var view: ListingContract.View? = null
-    private var source: Listing<Movie>? = null
+    private var source: ListingTwo<Movie>? = null
 
     private var retry: (() -> Unit)? = null
     private var refresh: (() -> Unit)? = null

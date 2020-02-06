@@ -13,6 +13,7 @@ import dev.forcetower.cubicrectangle.model.database.Movie
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.MainScope
 import org.junit.Assert.assertEquals
+import org.junit.Assert.assertNotEquals
 import org.junit.Assert.assertNotSame
 import org.junit.Assert.assertTrue
 import org.junit.Before
@@ -41,10 +42,11 @@ class SearchPresenterTest {
     private lateinit var captor: ArgumentCaptor<PagedList<Movie>>
 
     private val observer: Observer<PagedList<Movie>> = mock()
+
     private val service = FakeTMDbService()
     private val repository = MoviesRepository(service, AppExecutors())
 
-    private lateinit var presenter: SearchContract.Presenter
+    private lateinit var presenter: SearchPresenter
 
     @Before
     fun setup() {
@@ -55,14 +57,34 @@ class SearchPresenterTest {
     }
 
     @Test
+    fun emptyQueryYieldsEmptySource() {
+        presenter.search("avengers", MainScope())
+        Thread.sleep(100)
+        captor.run {
+            verify(observer, times(1)).onChanged(capture())
+            assertTrue(value.isNotEmpty())
+        }
+
+        presenter.search("", MainScope())
+        Thread.sleep(100)
+        captor.run {
+            verify(observer, times(2)).onChanged(capture())
+            assertTrue(value.isNullOrEmpty())
+        }
+    }
+
+    @Test
     fun changeQueryAlsoChangesSource() {
         presenter.search("avengers", MainScope())
+        Thread.sleep(100)
         val first = captor.run {
             verify(observer, times(1)).onChanged(capture())
             assertTrue(value.isNotEmpty())
             value
         }
+
         presenter.search("avengers 2", MainScope())
+        Thread.sleep(100)
         captor.run {
             verify(observer, times(2)).onChanged(capture())
             assertTrue(value.isNotEmpty())
@@ -71,23 +93,11 @@ class SearchPresenterTest {
     }
 
     @Test
-    fun emptyQueryYieldsEmptySource() {
-        presenter.search("avengers", MainScope())
-        captor.run {
-            verify(observer).onChanged(capture())
-            assertTrue(value.isNotEmpty())
-        }
-
-        presenter.search("", MainScope())
-        captor.run {
-            verify(observer, times(2)).onChanged(capture())
-            assertTrue(value.isEmpty())
-        }
-    }
-
-    @Test
     fun fetchErrorInvokesViewOnError() {
-        presenter.search("throw error", MainScope())
+        service.failsWith = "forced error"
+
+        presenter.search("error", MainScope())
+        Thread.sleep(100)
         val intCaptor = ArgumentCaptor.forClass(Int::class.java)
         intCaptor.run {
             verify(view, times(1)).onLoadError(capture())
@@ -96,12 +106,8 @@ class SearchPresenterTest {
             assertEquals(value, R.string.network_error)
         }
 
-        captor.run {
-            verify(observer, times(1)).onChanged(capture())
-            assertTrue(value.isEmpty())
-        }
-
-        presenter.search("throw error again", MainScope())
+        presenter.search("cant load...", MainScope())
+        Thread.sleep(100)
         intCaptor.run {
             verify(view, times(2)).moveToErrorState()
             verify(view, times(2)).onLoadError(capture())
@@ -115,12 +121,33 @@ class SearchPresenterTest {
             assertTrue(value.isEmpty())
         }
 
+        service.failsWith = null
         presenter.search("not error", MainScope())
+        Thread.sleep(100)
         captor.run {
             verify(observer, times(3)).onChanged(capture())
             // view can finally go to listing state
             verify(view, times(1)).moveToListingState()
             assertTrue(value.isNotEmpty())
+        }
+    }
+
+    @Test
+    fun callRefreshUpdatesList() {
+        presenter.search("avengers", MainScope())
+        Thread.sleep(100)
+        val first = captor.run {
+            verify(observer, times(1)).onChanged(capture())
+            assertTrue(value.isNotEmpty())
+            value
+        }
+
+        presenter.refresh()
+        Thread.sleep(100)
+        captor.run {
+            verify(observer, times(2)).onChanged(capture())
+            assertTrue(value.isNotEmpty())
+            assertNotEquals(first, value)
         }
     }
 }

@@ -1,12 +1,10 @@
 package dev.forcetower.cubicrectangle.view.search
 
-import androidx.lifecycle.LiveData
 import androidx.lifecycle.MediatorLiveData
-import androidx.paging.PagedList
+import androidx.lifecycle.switchMap
 import dev.forcetower.cubicrectangle.R
 import dev.forcetower.cubicrectangle.core.repository.MoviesRepository
 import dev.forcetower.cubicrectangle.core.services.datasources.helpers.Listing
-import dev.forcetower.cubicrectangle.core.services.datasources.helpers.NetworkState
 import dev.forcetower.cubicrectangle.core.services.datasources.helpers.Status
 import dev.forcetower.cubicrectangle.model.database.Movie
 import kotlinx.coroutines.CoroutineScope
@@ -15,47 +13,40 @@ class SearchPresenter(
     private val repository: MoviesRepository
 ) : SearchContract.Presenter {
     private var view: SearchContract.View? = null
-
-    private val list = MediatorLiveData<PagedList<Movie>>()
-    override val listing: LiveData<PagedList<Movie>>
-        get() = list
-
     private val _searchSource = MediatorLiveData<Listing<Movie>>()
 
-    private var retry: (() -> Unit)? = null
-    private var refresh: (() -> Unit)? = null
+    override val listing = _searchSource.switchMap { it.pagedList }
+    private val refreshState = _searchSource.switchMap { it.refreshState }
+    private val networkState = _searchSource.switchMap { it.networkState }
 
-    private var currentState: LiveData<NetworkState>? = null
+    private var lastSearch = ""
 
     init {
-        list.addSource(_searchSource) {
-            list.value = it.pagedList
-            retry = it.retry
-            refresh = it.refresh
-
-            currentState?.let { current -> list.removeSource(current) }
-            val state = it.networkState
-            if (state == null) {
-                view?.moveToListingState()
+        _searchSource.addSource(networkState) { change ->
+            change ?: return@addSource
+            if (change.status == Status.FAILED && listing.value.isNullOrEmpty()) {
+                view?.moveToErrorState()
+            } else if (change.status == Status.RUNNING && listing.value.isNullOrEmpty()) {
+                view?.moveToLoadingState()
             } else {
-                currentState = state
-                list.addSource(state) { change ->
-                    if (change.status == Status.FAILED && it.pagedList.isEmpty()) {
-                        view?.moveToErrorState()
-                    } else if (change.status == Status.RUNNING && it.pagedList.isEmpty()) {
-                        view?.moveToLoadingState()
-                    } else {
-                        view?.moveToListingState()
-                    }
-                    Unit
-                }
+                view?.moveToListingState()
+            }
+            Unit
+        }
+        _searchSource.addSource(refreshState) { change ->
+            if (change?.status == Status.RUNNING) {
+                view?.isRefreshing(true)
+            } else {
+                view?.isRefreshing(false)
             }
         }
     }
 
     override fun search(query: String, scope: CoroutineScope?) {
+        if (lastSearch == query) return
+        lastSearch = query
         if (query.isBlank()) {
-            _searchSource.value = repository.emptySource()
+            _searchSource.value = repository.emptySource2()
         } else {
             _searchSource.value = repository.query(query, scope ?: view!!.getLifecycleScope()) {
                 view?.onLoadError(R.string.network_error)
@@ -64,11 +55,11 @@ class SearchPresenter(
     }
 
     override fun retry() {
-        retry?.invoke()
+        _searchSource.value?.retry?.invoke()
     }
 
     override fun refresh() {
-        refresh?.invoke()
+        _searchSource.value?.refresh?.invoke()
     }
 
     override fun attach(v: SearchContract.View) {

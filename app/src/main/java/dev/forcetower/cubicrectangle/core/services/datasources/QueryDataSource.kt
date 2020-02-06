@@ -2,10 +2,10 @@ package dev.forcetower.cubicrectangle.core.services.datasources
 
 import androidx.lifecycle.MutableLiveData
 import androidx.paging.PageKeyedDataSource
-import dev.forcetower.cubicrectangle.model.database.Movie
-import dev.forcetower.cubicrectangle.model.database.toMovie
 import dev.forcetower.cubicrectangle.core.services.TMDbService
 import dev.forcetower.cubicrectangle.core.services.datasources.helpers.NetworkState
+import dev.forcetower.cubicrectangle.model.database.Movie
+import dev.forcetower.cubicrectangle.model.database.toMovie
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.launch
 import timber.log.Timber

@@ -6,11 +6,16 @@ import dev.forcetower.cubicrectangle.model.dto.responses.MoviesResponse
 import java.io.IOException
 
 class FakeTMDbService : TMDbService {
+    var failsWith: String? = null
     override suspend fun genres(): GenresResponse {
         TODO("unsupported")
     }
 
     override suspend fun moviesPopular(page: Int): MoviesResponse {
+        if (failsWith != null) {
+            throw IOException(failsWith)
+        }
+
         return MoviesResponse(
             page,
             10,
@@ -24,8 +29,8 @@ class FakeTMDbService : TMDbService {
     }
 
     override suspend fun searchMovie(query: String, page: Int): MoviesResponse {
-        if (query.contains("throw error", ignoreCase = true)) {
-            throw IOException("A exception")
+        if (failsWith != null) {
+            throw IOException(failsWith)
         }
 
         return MoviesResponse(
@@ -37,6 +42,9 @@ class FakeTMDbService : TMDbService {
     }
 
     override suspend fun moviesByGenre(genre: String, page: Int): MoviesResponse {
+        if (failsWith != null) {
+            throw IOException(failsWith)
+        }
         return MoviesResponse(
             page,
             10,

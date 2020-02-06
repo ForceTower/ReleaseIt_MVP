@@ -60,6 +60,10 @@ class SearchFragment : BaseFragment(), SearchContract.View {
         binding.labelError.setOnClickListener {
             presenter.retry()
         }
+
+        binding.swipe.setOnRefreshListener {
+            presenter.refresh()
+        }
     }
 
     override fun onStart() {
@@ -106,6 +110,10 @@ class SearchFragment : BaseFragment(), SearchContract.View {
         binding.labelError.visibility = View.GONE
         binding.labelLoading.visibility = View.GONE
         binding.recyclerMovies.visibility = View.VISIBLE
+    }
+
+    override fun isRefreshing(refreshing: Boolean) {
+        binding.swipe.isRefreshing = refreshing
     }
 
     override fun onDestroy() {

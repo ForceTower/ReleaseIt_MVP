@@ -17,6 +17,7 @@ interface SearchContract {
         fun moveToErrorState()
         fun moveToLoadingState()
         fun moveToListingState()
+        fun isRefreshing(refreshing: Boolean)
     }
 
     interface Presenter : BaseContract.Presenter<View> {
