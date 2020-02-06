@@ -91,6 +91,8 @@ class SearchPresenterTest {
         val intCaptor = ArgumentCaptor.forClass(Int::class.java)
         intCaptor.run {
             verify(view, times(1)).onLoadError(capture())
+            // view never went to listing state
+            verify(view, times(0)).moveToListingState()
             assertEquals(value, R.string.network_error)
         }
 
@@ -101,13 +103,24 @@ class SearchPresenterTest {
 
         presenter.search("throw error again", MainScope())
         intCaptor.run {
+            verify(view, times(2)).moveToErrorState()
             verify(view, times(2)).onLoadError(capture())
+            // view never went to listing state
+            verify(view, times(0)).moveToListingState()
             assertEquals(value, R.string.network_error)
         }
 
         captor.run {
             verify(observer, times(2)).onChanged(capture())
             assertTrue(value.isEmpty())
+        }
+
+        presenter.search("not error", MainScope())
+        captor.run {
+            verify(observer, times(3)).onChanged(capture())
+            // view can finally go to listing state
+            verify(view, times(1)).moveToListingState()
+            assertTrue(value.isNotEmpty())
         }
     }
 }
