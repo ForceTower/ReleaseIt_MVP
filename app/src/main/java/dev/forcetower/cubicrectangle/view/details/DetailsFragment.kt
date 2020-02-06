@@ -52,8 +52,6 @@ class DetailsFragment : BaseFragment(), DetailsContract.View {
             binding.contract = this@DetailsFragment
             val initial = if (resources.getBoolean(R.bool.on_night_mode)) Color.BLACK else Color.WHITE
             frame = UIAlphaFrame(it.root, 500, initial)
-        }.also {
-            Timber.d("This is running")
         }.root
     }
 

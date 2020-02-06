@@ -13,15 +13,15 @@ class SearchPresenter(
 ) : SearchContract.Presenter {
     private var view: SearchContract.View? = null
 
-    private val _searchSource = MediatorLiveData<PagedList<Movie>>()
-    override val searchSource: LiveData<PagedList<Movie>>
-        get() = _searchSource
+    override val searchSource = MediatorLiveData<PagedList<Movie>>()
+//    override val searchSource: LiveData<PagedList<Movie>>
+//        get() = _searchSource
 
     override fun search(query: String, scope: CoroutineScope?) {
         if (query.isBlank()) {
-            _searchSource.value = repository.emptySource()
+            searchSource.value = repository.emptySource()
         } else {
-            _searchSource.value = repository.search(query, scope ?: view!!.getLifecycleScope()) {
+            searchSource.value = repository.search(query, scope ?: view!!.getLifecycleScope()) {
                 view?.onLoadError(R.string.network_error)
             }
         }
