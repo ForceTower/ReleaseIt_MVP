@@ -10,6 +10,7 @@ import dev.forcetower.cubicrectangle.core.services.TMDbService
 import dev.forcetower.cubicrectangle.core.services.datasources.MovieGenreDataSource
 import dev.forcetower.cubicrectangle.core.services.datasources.factory.MovieGenreDataSourceFactory
 import dev.forcetower.cubicrectangle.core.services.datasources.QueryDataSource
+import dev.forcetower.cubicrectangle.core.services.datasources.factory.EmptyDataSourceFactory
 import dev.forcetower.cubicrectangle.core.services.datasources.factory.QueryDataSourceFactory
 import dev.forcetower.cubicrectangle.core.services.datasources.helpers.Listing
 import dev.forcetower.cubicrectangle.core.ui.lifecycle.EmptyLiveData
@@ -124,7 +125,7 @@ class MoviesRepository @Inject constructor(
 
     fun <T> emptySource(): Listing<T> {
         return Listing(
-            pagedList = EmptyLiveData.create(),
+            pagedList = EmptyDataSourceFactory<T>().toLiveData(1),
             networkState = EmptyLiveData.create(),
             retry = {},
             refresh = {},

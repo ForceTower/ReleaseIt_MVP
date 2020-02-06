@@ -69,7 +69,7 @@ class SearchPresenterTest {
         Thread.sleep(100)
         captor.run {
             verify(observer, times(2)).onChanged(capture())
-            assertTrue(value.isNullOrEmpty())
+            assertTrue(value.isEmpty())
         }
     }
 
