@@ -7,12 +7,11 @@ import androidx.paging.PagedList
 import androidx.paging.toLiveData
 import dev.forcetower.cubicrectangle.AppExecutors
 import dev.forcetower.cubicrectangle.core.services.TMDbService
-import dev.forcetower.cubicrectangle.core.services.datasources.EmptyDataSource
 import dev.forcetower.cubicrectangle.core.services.datasources.MovieGenreDataSource
+import dev.forcetower.cubicrectangle.core.services.datasources.factory.MovieGenreDataSourceFactory
 import dev.forcetower.cubicrectangle.core.services.datasources.QueryDataSource
 import dev.forcetower.cubicrectangle.core.services.datasources.factory.QueryDataSourceFactory
 import dev.forcetower.cubicrectangle.core.services.datasources.helpers.Listing
-import dev.forcetower.cubicrectangle.core.services.datasources.helpers.ListingTwo
 import dev.forcetower.cubicrectangle.core.ui.lifecycle.EmptyLiveData
 import dev.forcetower.cubicrectangle.model.database.Movie
 import dev.forcetower.cubicrectangle.model.database.toMovie
@@ -67,25 +66,6 @@ class MoviesRepository @Inject constructor(
         }
     }
 
-    @Deprecated("This method is simpler, but doesn't offer error handle")
-    fun search(
-        query: String,
-        scope: CoroutineScope,
-        error: (Throwable) -> Unit
-    ): PagedList<Movie> {
-        val config = PagedList.Config.Builder()
-            .setPageSize(20)
-            .setEnablePlaceholders(true)
-            .setInitialLoadSizeHint(20)
-            .build()
-
-        val source = QueryDataSource(query, service, scope, error, executors.networkIO())
-        return PagedList.Builder(source, config)
-            .setNotifyExecutor(executors.mainThread())
-            .setFetchExecutor(executors.networkIO())
-            .build()
-    }
-
     fun query(
         query: String,
         scope: CoroutineScope,
@@ -105,16 +85,54 @@ class MoviesRepository @Inject constructor(
             networkState = factory.sourceLiveData.switchMap {
                 it.networkState
             },
-            retry = {
-                factory.sourceLiveData.value?.retryAllFailed()
-            },
-            refresh = {
-                factory.sourceLiveData.value?.invalidate()
-            },
+            retry = { factory.sourceLiveData.value?.retryAllFailed() },
+            refresh = { factory.sourceLiveData.value?.invalidate() },
             refreshState = refreshState
         )
     }
 
+    fun queryMoviesByGenre(
+        genre: Long,
+        scope: CoroutineScope,
+        error: (Throwable) -> Unit
+    ): Listing<Movie> {
+        val factory = MovieGenreDataSourceFactory(
+            listOf(genre),
+            service,
+            scope,
+            error,
+            executors.networkIO()
+        )
+
+        val livePagedList = factory.toLiveData(
+            pageSize = 20,
+            fetchExecutor = executors.networkIO()
+        )
+
+        val refreshState = factory.sourceLiveData.switchMap {
+            it.initialLoad
+        }
+
+        return Listing(
+            pagedList = livePagedList,
+            networkState = factory.sourceLiveData.switchMap { it.networkState },
+            retry = { factory.sourceLiveData.value?.retryAllFailed() },
+            refresh = { factory.sourceLiveData.value?.invalidate() },
+            refreshState = refreshState
+        )
+    }
+
+    fun <T> emptySource(): Listing<T> {
+        return Listing(
+            pagedList = EmptyLiveData.create(),
+            networkState = EmptyLiveData.create(),
+            retry = {},
+            refresh = {},
+            refreshState = EmptyLiveData.create()
+        )
+    }
+
+    @Deprecated("This method is simpler, but doesn't offer error handle / refresh")
     // This is network only. TODO create a database + network
     fun getMoviesByGenre(
         genre: Long,
@@ -134,57 +152,22 @@ class MoviesRepository @Inject constructor(
             .build()
     }
 
-    fun queryMoviesByGenre(
-        genre: Long,
+    @Deprecated("This method is simpler, but doesn't offer error handle / refresh")
+    fun search(
+        query: String,
         scope: CoroutineScope,
         error: (Throwable) -> Unit
-    ): ListingTwo<Movie> {
-        val config = getDefaultConfig()
-
-        val source = MovieGenreDataSource(listOf(genre), service, scope, error, executors.networkIO())
-        val list = PagedList.Builder(source, config)
-            .setNotifyExecutor(executors.mainThread())
-            .setFetchExecutor(executors.diskIO())
+    ): PagedList<Movie> {
+        val config = PagedList.Config.Builder()
+            .setPageSize(20)
+            .setEnablePlaceholders(true)
+            .setInitialLoadSizeHint(20)
             .build()
 
-        return ListingTwo(
-            pagedList = list,
-            networkState = source.networkState,
-            retry = { source.retryAllFailed() },
-            refresh = { source.invalidate() },
-            refreshState = source.initialLoad
-        )
-    }
-
-    fun <T> emptySource(): ListingTwo<T> {
-        val source = EmptyDataSource<T>()
-        val list = PagedList.Builder(source, getDefaultConfig())
+        val source = QueryDataSource(query, service, scope, error, executors.networkIO())
+        return PagedList.Builder(source, config)
             .setNotifyExecutor(executors.mainThread())
             .setFetchExecutor(executors.networkIO())
             .build()
-
-        return ListingTwo(
-            pagedList = list,
-            networkState = null,
-            retry = {},
-            refresh = {},
-            refreshState = null
-        )
     }
-
-    fun <T> emptySource2(): Listing<T> {
-        return Listing(
-            pagedList = EmptyLiveData.create(),
-            networkState = EmptyLiveData.create(),
-            retry = {},
-            refresh = {},
-            refreshState = EmptyLiveData.create()
-        )
-    }
-
-    private fun getDefaultConfig() = PagedList.Config.Builder()
-        .setPageSize(20)
-        .setEnablePlaceholders(true)
-        .setInitialLoadSizeHint(20)
-        .build()
 }

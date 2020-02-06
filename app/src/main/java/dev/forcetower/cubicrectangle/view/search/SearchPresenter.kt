@@ -46,7 +46,7 @@ class SearchPresenter(
         if (lastSearch == query) return
         lastSearch = query
         if (query.isBlank()) {
-            _searchSource.value = repository.emptySource2()
+            _searchSource.value = repository.emptySource()
         } else {
             _searchSource.value = repository.query(query, scope ?: view!!.getLifecycleScope()) {
                 view?.onLoadError(R.string.network_error)

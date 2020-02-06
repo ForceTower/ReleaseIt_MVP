@@ -2,75 +2,63 @@ package dev.forcetower.cubicrectangle.view.listing
 
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MediatorLiveData
+import androidx.lifecycle.switchMap
 import androidx.paging.PagedList
-import dev.forcetower.cubicrectangle.R
 import dev.forcetower.cubicrectangle.model.database.Movie
 import dev.forcetower.cubicrectangle.core.repository.MoviesRepository
-import dev.forcetower.cubicrectangle.core.services.datasources.helpers.ListingTwo
-import dev.forcetower.cubicrectangle.core.services.datasources.helpers.NetworkState
+import dev.forcetower.cubicrectangle.core.services.datasources.helpers.Listing
 import dev.forcetower.cubicrectangle.core.services.datasources.helpers.Status
 
 class ListingPresenter constructor(
     private val repository: MoviesRepository
 ) : ListingContract.Presenter {
     private var view: ListingContract.View? = null
-    private var source: ListingTwo<Movie>? = null
+    private val _genreSource = MediatorLiveData<Listing<Movie>>()
 
-    private var retry: (() -> Unit)? = null
-    private var refresh: (() -> Unit)? = null
+    override val listing: LiveData<PagedList<Movie>> = _genreSource.switchMap { it.pagedList }
+    private val refreshState = _genreSource.switchMap { it.refreshState }
+    private val networkState = _genreSource.switchMap { it.networkState }
 
-    private val _currentState = MediatorLiveData<NetworkState>()
-    override val currentState: LiveData<NetworkState>
-        get() = _currentState
+    private var lastGenre = 0L
 
-    private var networkSource: LiveData<NetworkState>? = null
+    init {
+        _genreSource.addSource(networkState) { change ->
+            change ?: return@addSource
+            if (change.status == Status.FAILED && listing.value.isNullOrEmpty()) {
+                view?.moveToErrorState()
+            } else if (change.status == Status.RUNNING && listing.value.isNullOrEmpty()) {
+                view?.moveToLoadingState()
+            } else {
+                view?.moveToListingState()
+            }
+            Unit
+        }
+        _genreSource.addSource(refreshState) { change ->
+            if (change?.status == Status.RUNNING) {
+                view?.isRefreshing(true)
+            } else {
+                view?.isRefreshing(false)
+            }
+        }
+    }
 
     override fun attach(v: ListingContract.View) {
         view = v
     }
 
     override fun retry() {
-        retry?.invoke()
+        _genreSource.value?.retry?.invoke()
     }
 
     override fun refresh() {
-        refresh?.invoke()
+        _genreSource.value?.refresh?.invoke()
     }
 
-    override fun loadMoviesByGenre(genreId: Long): PagedList<Movie> {
-        val src = source
-        return if (src == null) {
-            val new = repository.queryMoviesByGenre(genreId, view!!.getLifecycleScope()) {
-                // view?.onLoadError(R.string.network_error)
-            }
-            source = new
-
-            retry = new.retry
-            refresh = new.refresh
-            networkSource = new.networkState
-            observeNetwork()
-            new.pagedList
-        } else {
-            observeNetwork()
-            src.pagedList
-        }
-    }
-
-    private fun observeNetwork() {
-        networkSource?.let {
-            _currentState.removeSource(it)
-            _currentState.addSource(it) { change ->
-                if (change.status == Status.FAILED && source?.pagedList.isNullOrEmpty()) {
-                    view?.moveToErrorState()
-                    view?.onLoadError(R.string.network_error)
-                } else if (change.status == Status.RUNNING && source?.pagedList.isNullOrEmpty()) {
-                    view?.moveToLoadingState()
-                } else {
-                    view?.moveToListingState()
-                }
-                _currentState.value = change
-                Unit
-            }
+    override fun loadMoviesByGenre(genreId: Long) {
+        if (lastGenre == genreId) return
+        lastGenre = genreId
+        _genreSource.value = repository.queryMoviesByGenre(genreId, view!!.getLifecycleScope()) {
+            // view?.onLoadError(R.string.network_error)
         }
     }
 

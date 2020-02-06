@@ -48,15 +48,24 @@ class ListingFragment : BaseFragment(), ListingContract.View {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        presenter.loadMoviesByGenre(requireArguments().getLong("genre_id"))
         val adapter = MoviesAdapter(this)
+
         binding.apply {
             recyclerMovies.adapter = adapter
         }
-        presenter.currentState.observe(viewLifecycleOwner, Observer { Unit })
+
+        presenter.listing.observe(viewLifecycleOwner, Observer {
+            adapter.submitList(it)
+        })
+
         binding.labelError.setOnClickListener {
             presenter.retry()
         }
-        adapter.submitList(presenter.loadMoviesByGenre(requireArguments().getLong("genre_id")))
+
+        binding.swipe.setOnRefreshListener {
+            presenter.refresh()
+        }
     }
 
     override fun getLifecycleScope(): CoroutineScope {
@@ -89,6 +98,10 @@ class ListingFragment : BaseFragment(), ListingContract.View {
         binding.labelError.visibility = View.GONE
         binding.labelLoading.visibility = View.GONE
         binding.recyclerMovies.visibility = View.VISIBLE
+    }
+
+    override fun isRefreshing(refreshing: Boolean) {
+        binding.swipe.isRefreshing = refreshing
     }
 
     override fun onDestroy() {
