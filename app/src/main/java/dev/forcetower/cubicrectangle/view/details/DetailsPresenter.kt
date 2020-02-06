@@ -14,6 +14,7 @@ class DetailsPresenter constructor(
 
     override fun loadMovieDetails(movieId: Long, scope: CoroutineScope?): LiveData<Movie> {
         val src = source ?: repository.getMovie(movieId, scope ?: view!!.getLifecycleScope()) {
+            it.printStackTrace()
             view?.onLoadError(R.string.network_error)
         }
         source = src

@@ -1,6 +1,5 @@
 package dev.forcetower.cubicrectangle.core.services
 
-import dev.forcetower.cubicrectangle.model.database.toMovie
 import dev.forcetower.cubicrectangle.model.dto.MovieDetailed
 import dev.forcetower.cubicrectangle.model.dto.responses.GenresResponse
 import dev.forcetower.cubicrectangle.model.dto.responses.MoviesResponse
@@ -29,7 +28,7 @@ class FakeTMDbService : TMDbService {
         if (failsWith != null) {
             throw IOException(failsWith)
         }
-        return MovieFactory.createMovieDetailed("a movie $movieId $append")
+        return MovieFactory.createMovieDetailed()
     }
 
     override suspend fun searchMovie(query: String, page: Int): MoviesResponse {
@@ -53,7 +52,7 @@ class FakeTMDbService : TMDbService {
             page,
             10,
             1,
-            (0..10).map { MovieFactory.createMovieSimple(genres = genre) }
+            (0..30).map { MovieFactory.createMovieSimple(genres = genre) }
         )
     }
 }

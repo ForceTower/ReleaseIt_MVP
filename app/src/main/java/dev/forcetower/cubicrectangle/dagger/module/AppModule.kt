@@ -8,7 +8,6 @@ import dagger.Provides
 import dev.forcetower.cubicrectangle.BuildConfig
 import dev.forcetower.cubicrectangle.Constants
 import dev.forcetower.cubicrectangle.CubicApp
-import dev.forcetower.cubicrectangle.core.services.TMDbService
 import dev.forcetower.cubicrectangle.core.services.converters.TimeConverters
 import okhttp3.Interceptor
 import okhttp3.OkHttpClient
@@ -16,8 +15,6 @@ import okhttp3.Response
 import okhttp3.logging.HttpLoggingInterceptor
 import org.threeten.bp.LocalDate
 import org.threeten.bp.ZonedDateTime
-import retrofit2.Retrofit
-import retrofit2.converter.gson.GsonConverterFactory
 import java.util.concurrent.TimeUnit
 import javax.inject.Singleton
 
@@ -81,16 +78,5 @@ object AppModule {
             .registerTypeAdapter(LocalDate::class.java, TimeConverters.LD_DESERIALIZER)
             .serializeNulls()
             .create()
-    }
-
-    @Provides
-    @Singleton
-    fun provideTMDbService(client: OkHttpClient, gson: Gson): TMDbService {
-        return Retrofit.Builder()
-            .baseUrl(Constants.TMDB_SERVICE)
-            .client(client)
-            .addConverterFactory(GsonConverterFactory.create(gson))
-            .build()
-            .create(TMDbService::class.java)
     }
 }
