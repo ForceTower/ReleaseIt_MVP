@@ -14,10 +14,15 @@ interface SearchContract {
         fun onLoadError(@StringRes resource: Int)
         fun onNavigateBack()
         fun onClearSearch()
+        fun moveToErrorState()
+        fun moveToLoadingState()
+        fun moveToListingState()
     }
 
     interface Presenter : BaseContract.Presenter<View> {
-        val searchSource: LiveData<PagedList<Movie>>
+        val listing: LiveData<PagedList<Movie>>
         fun search(query: String, scope: CoroutineScope? = null)
+        fun retry()
+        fun refresh()
     }
 }

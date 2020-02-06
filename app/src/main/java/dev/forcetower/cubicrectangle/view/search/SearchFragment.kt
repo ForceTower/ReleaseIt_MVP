@@ -11,6 +11,7 @@ import androidx.lifecycle.Observer
 import androidx.lifecycle.viewModelScope
 import androidx.navigation.fragment.findNavController
 import com.google.android.material.snackbar.Snackbar
+import dev.forcetower.cubicrectangle.R
 import dev.forcetower.cubicrectangle.core.base.BaseFragment
 import dev.forcetower.cubicrectangle.core.base.BaseViewModelFactory
 import dev.forcetower.cubicrectangle.core.extensions.requestApplyInsetsWhenAttached
@@ -48,12 +49,16 @@ class SearchFragment : BaseFragment(), SearchContract.View {
             recyclerMovies.adapter = adapter
         }
 
-        presenter.searchSource.observe(viewLifecycleOwner, Observer {
-            adapter.submitList(it)
+        presenter.listing.observe(viewLifecycleOwner, Observer { listing ->
+            adapter.submitList(listing)
         })
 
         binding.editQuery.doAfterTextChanged { text ->
             presenter.search(text.toString())
+        }
+
+        binding.labelError.setOnClickListener {
+            presenter.retry()
         }
     }
 
@@ -72,7 +77,9 @@ class SearchFragment : BaseFragment(), SearchContract.View {
     }
 
     override fun onLoadError(@StringRes resource: Int) {
-        showSnack(getString(resource), Snackbar.LENGTH_LONG)
+        getSnack(getString(resource), Snackbar.LENGTH_LONG)?.setAction(R.string.retry) {
+            presenter.retry()
+        }?.show()
     }
 
     override fun onNavigateBack() {
@@ -81,6 +88,24 @@ class SearchFragment : BaseFragment(), SearchContract.View {
 
     override fun onClearSearch() {
         binding.editQuery.setText("")
+    }
+
+    override fun moveToErrorState() {
+        binding.labelError.visibility = View.VISIBLE
+        binding.labelLoading.visibility = View.GONE
+        binding.recyclerMovies.visibility = View.GONE
+    }
+
+    override fun moveToLoadingState() {
+        binding.labelError.visibility = View.GONE
+        binding.labelLoading.visibility = View.VISIBLE
+        binding.recyclerMovies.visibility = View.GONE
+    }
+
+    override fun moveToListingState() {
+        binding.labelError.visibility = View.GONE
+        binding.labelLoading.visibility = View.GONE
+        binding.recyclerMovies.visibility = View.VISIBLE
     }
 
     override fun onDestroy() {

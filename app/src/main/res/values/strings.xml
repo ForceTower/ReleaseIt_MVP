@@ -19,4 +19,7 @@
     <string name="title_like_format">%1$d</string>
     <string name="unknown_runtime">\??? min</string>
     <string name="title_score">%1$.1f</string>
+    <string name="retry">Retry</string>
+    <string name="loading_data">Loading data</string>
+    <string name="load_error">Load error</string>
 </resources>

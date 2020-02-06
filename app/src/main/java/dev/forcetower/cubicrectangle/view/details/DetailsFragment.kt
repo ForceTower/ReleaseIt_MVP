@@ -28,7 +28,6 @@ import dev.forcetower.cubicrectangle.databinding.FragmentDetailsBinding
 import dev.forcetower.cubicrectangle.model.database.Movie
 import dev.forcetower.cubicrectangle.view.details.helpers.UIAlphaFrame
 import kotlinx.coroutines.CoroutineScope
-import timber.log.Timber
 import javax.inject.Inject
 
 class DetailsFragment : BaseFragment(), DetailsContract.View {

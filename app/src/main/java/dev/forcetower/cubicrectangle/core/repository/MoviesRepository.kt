@@ -4,12 +4,13 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.liveData
 import androidx.paging.PagedList
 import dev.forcetower.cubicrectangle.AppExecutors
-import dev.forcetower.cubicrectangle.model.database.Movie
-import dev.forcetower.cubicrectangle.model.database.toMovie
 import dev.forcetower.cubicrectangle.core.services.TMDbService
 import dev.forcetower.cubicrectangle.core.services.datasources.EmptyDataSource
 import dev.forcetower.cubicrectangle.core.services.datasources.MovieGenreDataSource
 import dev.forcetower.cubicrectangle.core.services.datasources.QueryDataSource
+import dev.forcetower.cubicrectangle.core.services.datasources.helpers.Listing
+import dev.forcetower.cubicrectangle.model.database.Movie
+import dev.forcetower.cubicrectangle.model.database.toMovie
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import timber.log.Timber
@@ -35,7 +36,6 @@ class MoviesRepository @Inject constructor(
     }
 
     fun searchLive(query: String): LiveData<List<Movie>> {
-
         return liveData(Dispatchers.IO) {
             try {
                 val result = service.searchMovie(query).results
@@ -73,11 +73,32 @@ class MoviesRepository @Inject constructor(
             .setInitialLoadSizeHint(20)
             .build()
 
-        val source = QueryDataSource(query, service, scope, error)
+        val source = QueryDataSource(query, service, scope, error, executors.networkIO())
         return PagedList.Builder(source, config)
             .setNotifyExecutor(executors.mainThread())
-            .setFetchExecutor(executors.diskIO())
+            .setFetchExecutor(executors.networkIO())
             .build()
+    }
+
+    fun query(
+        query: String,
+        scope: CoroutineScope,
+        error: (Throwable) -> Unit
+    ): Listing<Movie> {
+        val source = QueryDataSource(query, service, scope, error, executors.networkIO())
+        val list = PagedList.Builder(source, getDefaultConfig())
+            .setNotifyExecutor(executors.mainThread())
+            .setFetchExecutor(executors.networkIO())
+            .build()
+
+        val refreshState = source.initialLoad
+        return Listing(
+            pagedList = list,
+            networkState = source.networkState,
+            retry = { source.retryAllFailed() },
+            refresh = { source.invalidate() },
+            refreshState = refreshState
+        )
     }
 
     // This is network only. TODO create a database + network
@@ -99,11 +120,25 @@ class MoviesRepository @Inject constructor(
             .build()
     }
 
-    fun <T> emptySource(): PagedList<T> {
+    fun <T> emptySource(): Listing<T> {
         val source = EmptyDataSource<T>()
-        return PagedList.Builder(source, 1)
+        val list = PagedList.Builder(source, getDefaultConfig())
             .setNotifyExecutor(executors.mainThread())
-            .setFetchExecutor(executors.diskIO())
+            .setFetchExecutor(executors.networkIO())
             .build()
+
+        return Listing(
+            pagedList = list,
+            networkState = null,
+            retry = {},
+            refresh = {},
+            refreshState = null
+        )
     }
+
+    private fun getDefaultConfig() = PagedList.Config.Builder()
+        .setPageSize(20)
+        .setEnablePlaceholders(true)
+        .setInitialLoadSizeHint(20)
+        .build()
 }
