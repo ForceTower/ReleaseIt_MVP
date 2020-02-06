@@ -18,7 +18,7 @@ import org.mockito.MockitoAnnotations
 class ListingPresenterTest : BaseListingPresenterTest() {
     @Mock
     private lateinit var view: ListingContract.View
-    private lateinit var presenter: ListingPresenter
+    private lateinit var presenter: ListingContract.Presenter
 
     @Before
     fun setup() {

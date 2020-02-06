@@ -14,6 +14,6 @@ interface DetailsContract {
     }
 
     interface Presenter : BaseContract.Presenter<View> {
-        fun loadMovieDetails(movieId: Long): LiveData<Movie>
+        fun loadMovieDetails(movieId: Long, scope: CoroutineScope? = null): LiveData<Movie>
     }
 }
