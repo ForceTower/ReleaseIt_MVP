@@ -10,7 +10,7 @@ import org.threeten.bp.format.DateTimeFormatter
 import android.annotation.SuppressLint
 import java.util.Locale
 
-private const val formatPattern = "d 'de' MMMM 'de' yyyy"
+private const val formatPattern = "dd 'de' MMMM 'de' yyyy"
 
 @SuppressLint("ConstantLocale")
 val FORMATTER_MONTH_DAY: DateTimeFormatter =
