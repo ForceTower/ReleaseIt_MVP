@@ -5,6 +5,7 @@ import android.util.TypedValue
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.view.WindowInsets
 import android.view.animation.AnimationUtils
 import android.view.inputmethod.InputMethodManager
 import androidx.annotation.LayoutRes
@@ -87,8 +88,37 @@ fun View.requestApplyInsetsWhenAttached() {
     }
 }
 
+fun View.doOnApplyWindowInsets(block: (View, WindowInsets, InitialPadding, InitialMargin) -> Unit) {
+    // Create a snapshot of the view's padding & margin states
+    val initialPadding = recordInitialPaddingForView(this)
+    val initialMargin = recordInitialMarginForView(this)
+    // Set an actual OnApplyWindowInsetsListener which proxies to the given
+    // lambda, also passing in the original padding & margin states
+    setOnApplyWindowInsetsListener { v, insets ->
+        block(v, insets, initialPadding, initialMargin)
+        // Always return the insets, so that children can also use them
+        insets
+    }
+    // request some insets
+    requestApplyInsetsWhenAttached()
+}
+
+private fun recordInitialPaddingForView(view: View) = InitialPadding(
+    view.paddingLeft, view.paddingTop, view.paddingRight, view.paddingBottom
+)
+
+private fun recordInitialMarginForView(view: View): InitialMargin {
+    val lp = view.layoutParams as? ViewGroup.MarginLayoutParams
+        ?: throw IllegalArgumentException("Invalid view layout params")
+    return InitialMargin(lp.leftMargin, lp.topMargin, lp.rightMargin, lp.bottomMargin)
+}
+
 private fun createStateForView(view: View) = ViewPaddingState(view.paddingLeft,
         view.paddingTop, view.paddingRight, view.paddingBottom, view.paddingStart, view.paddingEnd)
+
+class InitialPadding(val left: Int, val top: Int, val right: Int, val bottom: Int)
+
+class InitialMargin(val left: Int, val top: Int, val right: Int, val bottom: Int)
 
 data class ViewPaddingState(
     val left: Int,

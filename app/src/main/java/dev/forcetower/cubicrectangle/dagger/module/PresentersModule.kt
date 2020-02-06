@@ -1,4 +1,4 @@
-package dev.forcetower.cubicrectangle.dagger.module.home
+package dev.forcetower.cubicrectangle.dagger.module
 
 import dagger.Module
 import dagger.Provides
@@ -11,7 +11,7 @@ import dev.forcetower.cubicrectangle.view.search.SearchContract
 import dev.forcetower.cubicrectangle.view.search.SearchPresenter
 
 @Module
-object HomePresentersModule {
+object PresentersModule {
     @Provides
     fun provideListingPresenter(repository: MoviesRepository): ListingContract.Presenter {
         return ListingPresenter(repository)

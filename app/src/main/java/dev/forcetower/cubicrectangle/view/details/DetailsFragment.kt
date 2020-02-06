@@ -6,9 +6,7 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.annotation.StringRes
 import androidx.fragment.app.viewModels
-import androidx.lifecycle.Observer
 import androidx.lifecycle.viewModelScope
-import androidx.navigation.fragment.navArgs
 import com.google.android.material.snackbar.Snackbar
 import dev.forcetower.cubicrectangle.core.base.BaseFragment
 import dev.forcetower.cubicrectangle.core.base.BaseViewModelFactory
@@ -21,7 +19,7 @@ class DetailsFragment : BaseFragment(), DetailsContract.View {
     lateinit var factory: BaseViewModelFactory
 
     private lateinit var binding: FragmentDetailsBinding
-    private val args: DetailsFragmentArgs by navArgs()
+    // private val args: DetailsFragmentArgs by navArgs()
     private val viewModel by viewModels<DetailsViewModel> { factory }
     private val presenter: DetailsContract.Presenter
         get() = viewModel.presenter
@@ -40,8 +38,8 @@ class DetailsFragment : BaseFragment(), DetailsContract.View {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        presenter.loadMovieDetails(args.movieId).observe(viewLifecycleOwner, Observer {
-        })
+//        presenter.loadMovieDetails(args.movieId).observe(viewLifecycleOwner, Observer {
+//        })
     }
 
     override fun getLifecycleScope(): CoroutineScope {

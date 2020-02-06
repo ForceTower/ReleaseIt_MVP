@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="utf-8"?>
+<transitionSet
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:duration="350"
+    android:transitionOrdering="together">
+
+    <changeBounds android:interpolator="@android:interpolator/fast_out_slow_in">
+        <targets>
+            <target android:targetId="@id/background" />
+        </targets>
+    </changeBounds>
+
+    <transition
+        class="dev.forcetower.cubicrectangle.core.ui.transition.DetailedSharedEnter"
+        android:interpolator="@android:interpolator/fast_out_slow_in">
+        <targets>
+            <target android:targetId="@id/image" />
+        </targets>
+    </transition>
+
+    <transition
+        class="dev.forcetower.cubicrectangle.core.ui.transition.DarkenImage"
+        app:initialRgbScale="0.85"
+        app:finalRgbScale="1.0"
+        android:interpolator="@android:interpolator/linear">
+        <targets>
+            <target android:targetId="@id/image" />
+        </targets>
+    </transition>
+
+</transitionSet>

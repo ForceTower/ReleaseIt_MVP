@@ -8,4 +8,5 @@
     <string name="clear_search">Clear search</string>
     <string name="search_movies">Pesquisar filmes</string>
     <string name="network_error">Erro de conexão</string>
+    <string name="back_button">Back button</string>
 </resources>

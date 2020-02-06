@@ -1,0 +1,127 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
+    <data>
+        <variable
+            name="movie"
+            type="dev.forcetower.cubicrectangle.model.database.Movie" />
+
+        <variable
+            name="imageListener"
+            type="dev.forcetower.cubicrectangle.core.bindings.ImageLoadListener"/>
+    </data>
+    <dev.forcetower.cubicrectangle.core.ui.widget.ElasticDragDismissFrameLayout
+        android:id="@+id/draggable_frame"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:transitionGroup="false"
+        app:layoutFullscreen="@{true}"
+        app:marginLeftSystemWindowInsets="@{true}"
+        app:marginRightSystemWindowInsets="@{true}"
+        app:marginTopSystemWindowInsets="@{true}"
+        app:dragDismissDistance="112dp"
+        app:dragDismissScale="0.95">
+
+        <View
+            android:id="@+id/background"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:background="?attr/colorSurface"
+            android:transitionName="@string/transition_detail_background" />
+
+
+        <dev.forcetower.cubicrectangle.core.ui.widget.ParallaxScrimageView
+            android:id="@+id/image"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:foreground="@drawable/mid_grey_ripple"
+            android:transitionName="@string/transition_movie"
+            android:minHeight="@dimen/movie_collapsed_app_bar_height"
+            android:importantForAccessibility="no"
+            android:scaleType="centerCrop"
+            android:background="@drawable/surface_contrast"
+            app:imageTmdbUrl="@{movie.posterPath}"
+            app:listener="@{imageListener}"
+            app:overrideImageWidth="@{900}"
+            app:overrideImageHeight="@{1400}"
+            app:crossFade="@{true}"
+            app:scrimColor="@color/scrim"
+            app:scrimAlpha="0"
+            app:maxScrimAlpha="0.4"
+            app:parallaxFactor="-0.5"/>
+
+        <FrameLayout
+            android:id="@+id/back_wrapper"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:background="@android:color/transparent"
+            android:elevation="@dimen/z_fab_over_touchable_app_bar">
+
+            <ImageButton
+                android:id="@+id/back"
+                android:layout_width="?android:actionBarSize"
+                android:layout_height="?android:actionBarSize"
+                android:layout_marginEnd="16dp"
+                android:layout_marginBottom="16dp"
+                android:contentDescription="@string/back_button"
+                android:tint="@android:color/white"
+                android:src="@drawable/ic_arrow_back_black_24dp"
+                android:background="@drawable/mid_grey_ripple" />
+        </FrameLayout>
+
+        <androidx.core.widget.NestedScrollView
+            android:id="@+id/body_scroll"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:paddingBottom="16dp"
+            android:clipToPadding="false"
+            android:orientation="vertical"
+            android:scrollbars="vertical"
+            android:scrollbarStyle="insideOverlay"
+            app:paddingBottomSystemWindowInsets="@{true}">
+
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:transitionGroup="false"
+                android:background="@android:color/transparent">
+
+                <View
+                    android:id="@+id/image_spacer"
+                    android:layout_width="0dp"
+                    android:layout_height="0dp"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintDimensionRatio="H,9:14"/>
+
+                <TextView
+                    android:id="@+id/movie_title"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:padding="16dp"
+                    android:textColor="?attr/colorOnSurface"
+                    android:textSize="22sp"
+                    android:text="@{movie.title}"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@id/image_spacer"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    tools:text="Homem Aranha: de Volta ao Lar"/>
+
+                <TextView
+                    android:id="@+id/movie_description"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:text="@{movie.description}"
+                    android:layout_marginTop="8dp"
+                    android:paddingHorizontal="16dp"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@id/movie_title"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    tools:text="What a nice meme!" />
+
+            </androidx.constraintlayout.widget.ConstraintLayout>
+        </androidx.core.widget.NestedScrollView>
+    </dev.forcetower.cubicrectangle.core.ui.widget.ElasticDragDismissFrameLayout>
+</layout>

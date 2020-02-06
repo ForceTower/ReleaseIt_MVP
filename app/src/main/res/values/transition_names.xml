@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="transition_movie" translatable="false">movie</string>
+    <string name="transition_movie_title" translatable="false">movie_title</string>
+    <string name="transition_detail_background" translatable="false">detail_background</string>
+</resources>

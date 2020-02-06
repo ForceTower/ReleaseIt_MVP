@@ -1,20 +1,24 @@
 package dev.forcetower.cubicrectangle.view.listing
 
+import android.app.ActivityOptions
+import android.content.Intent
 import android.os.Bundle
+import android.util.Pair
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.annotation.StringRes
 import androidx.core.os.bundleOf
+import androidx.core.view.forEach
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.viewModelScope
-import androidx.navigation.fragment.findNavController
+import dev.forcetower.cubicrectangle.R
 import dev.forcetower.cubicrectangle.core.base.BaseFragment
 import dev.forcetower.cubicrectangle.core.base.BaseViewModelFactory
 import dev.forcetower.cubicrectangle.model.database.Movie
 import dev.forcetower.cubicrectangle.databinding.FragmentListingBinding
 import dev.forcetower.cubicrectangle.view.common.MoviesAdapter
-import dev.forcetower.cubicrectangle.view.genres.GenresFragmentDirections
+import dev.forcetower.cubicrectangle.view.details.DetailedActivity
 import kotlinx.coroutines.CoroutineScope
 import javax.inject.Inject
 
@@ -60,8 +64,27 @@ class ListingFragment : BaseFragment(), ListingContract.View {
     }
 
     override fun onMovieClick(movie: Movie) {
-        val direction = GenresFragmentDirections.actionGenresToDetails(movie.id)
-        findNavController().navigate(direction)
+//        val direction = GenresFragmentDirections.actionGenresToDetails(movie.id)
+//        findNavController().navigate(direction)
+
+        val intent = Intent(requireContext(), DetailedActivity::class.java)
+        val container = findMovieShot(binding.recyclerMovies, movie.id)
+        intent.putExtra("movieId", movie.id)
+        val options = ActivityOptions.makeSceneTransitionAnimation(
+            requireActivity(),
+            Pair.create(container, getString(R.string.transition_movie)),
+            Pair.create(container, getString(R.string.transition_detail_background))
+        )
+        requireActivity().startActivity(intent, options.toBundle())
+    }
+
+    private fun findMovieShot(entities: ViewGroup, id: Long): View {
+        entities.forEach {
+            if (it.getTag(R.id.tag_movie_id) == "movie_$id") {
+                return it.findViewById(R.id.image_poster)
+            }
+        }
+        return entities
     }
 
     override fun onLoadError(@StringRes resource: Int) {

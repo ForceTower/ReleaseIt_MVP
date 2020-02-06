@@ -28,7 +28,7 @@
                 android:importantForAccessibility="no"
                 android:scaleType="centerCrop"
                 app:imageTmdbUrl="@{movie.posterPath}"
-                app:layout_constraintDimensionRatio="9:14"
+                app:layout_constraintDimensionRatio="H,9:14"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintTop_toTopOf="parent"

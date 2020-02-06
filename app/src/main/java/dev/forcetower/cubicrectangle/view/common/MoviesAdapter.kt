@@ -19,7 +19,9 @@ class MoviesAdapter(
     }
 
     override fun onBindViewHolder(holder: MovieHolder, position: Int) {
-        holder.binding.movie = getItem(position)
+        val item = getItem(position)
+        holder.binding.movie = item
+        holder.binding.root.setTag(R.id.tag_movie_id, "movie_${item?.id}")
     }
 
     inner class MovieHolder(

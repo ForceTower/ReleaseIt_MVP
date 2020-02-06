@@ -22,6 +22,14 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+        <activity
+            android:name=".view.details.DetailedActivity"
+            android:parentActivityName=".view.HomeActivity"
+            android:theme="@style/Release.Theme.Translucent.Detailed.Movie">
+            <intent-filter>
+                <action android:name="android.intent.action.VIEW" />
+            </intent-filter>
+        </activity>
     </application>
 
 </manifest>

@@ -1,46 +1,52 @@
 package dev.forcetower.cubicrectangle.core.bindings
 
 import android.graphics.drawable.Drawable
-import android.net.Uri
 import android.widget.ImageView
-import androidx.core.net.toUri
 import androidx.databinding.BindingAdapter
 import com.bumptech.glide.Glide
 import com.bumptech.glide.load.DataSource
 import com.bumptech.glide.load.engine.GlideException
+import com.bumptech.glide.load.resource.drawable.DrawableTransitionOptions
 import com.bumptech.glide.request.RequestListener
-import com.bumptech.glide.request.RequestOptions
 import com.bumptech.glide.request.target.Target
 
-@BindingAdapter(value = ["imageUri", "placeholder", "clipCircle", "listener"], requireAll = false)
-fun imageUri(imageView: ImageView, imageUri: Uri?, placeholder: Drawable?, clipCircle: Boolean?, listener: ImageLoadListener?) {
-    val circular = clipCircle ?: false
-    var request = when (imageUri) {
-        null -> {
-            Glide.with(imageView).load(placeholder)
-        }
-        else -> {
-            Glide.with(imageView)
-                .load(imageUri)
-                .apply(RequestOptions().placeholder(placeholder))
-        }
-    }
-    request = if (circular) {
-        request.circleCrop()
-    } else {
-        request
+@BindingAdapter(value = [
+    "imageUrl",
+    "clipCircle",
+    "listener",
+    "crossFade",
+    "overrideImageWidth",
+    "overrideImageHeight"
+], requireAll = false)
+fun imageUri(
+    imageView: ImageView,
+    imageUrl: String?,
+    clipCircle: Boolean? = false,
+    listener: ImageLoadListener?,
+    crossFade: Boolean? = false,
+    overrideWidth: Int? = null,
+    overrideHeight: Int? = null
+) {
+    if (imageUrl == null) return
+
+    var request = Glide.with(imageView).load(imageUrl)
+
+    if (clipCircle == true) request = request.circleCrop()
+    if (crossFade == true) request = request.transition(DrawableTransitionOptions.withCrossFade())
+    if (overrideWidth != null && overrideHeight != null) {
+        request = request.override(overrideWidth, overrideHeight)
     }
 
     if (listener != null) {
         request = request.listener(object : RequestListener<Drawable> {
             override fun onResourceReady(
-                resource: Drawable?,
+                resource: Drawable,
                 model: Any?,
                 target: Target<Drawable>?,
                 dataSource: DataSource?,
                 isFirstResource: Boolean
             ): Boolean {
-                listener.onImageLoaded()
+                listener.onImageLoaded(resource)
                 return false
             }
 
@@ -58,18 +64,28 @@ fun imageUri(imageView: ImageView, imageUri: Uri?, placeholder: Drawable?, clipC
     request.into(imageView)
 }
 
-@BindingAdapter(value = ["imageUrl", "placeholder", "clipCircle", "listener"], requireAll = false)
-fun imageUrl(imageView: ImageView, imageUrl: String?, placeholder: Drawable?, clipCircle: Boolean?, listener: ImageLoadListener?) {
-    imageUri(imageView, imageUrl?.toUri(), placeholder, clipCircle, listener)
-}
-
-@BindingAdapter(value = ["imageTmdbUrl", "placeholder", "clipCircle", "listener"], requireAll = false)
-fun imageTmdbUrl(imageView: ImageView, imageUrl: String?, placeholder: Drawable?, clipCircle: Boolean?, listener: ImageLoadListener?) {
+@BindingAdapter(value = [
+    "imageTmdbUrl",
+    "clipCircle",
+    "listener",
+    "crossFade",
+    "overrideImageWidth",
+    "overrideImageHeight"
+], requireAll = false)
+fun imageTmdbUrl(
+    imageView: ImageView,
+    imageUrl: String?,
+    clipCircle: Boolean? = false,
+    listener: ImageLoadListener? = null,
+    crossFade: Boolean? = false,
+    overrideWidth: Int? = null,
+    overrideHeight: Int? = null
+) {
     val url = if (imageUrl == null) null else "https://image.tmdb.org/t/p/w780$imageUrl"
-    imageUri(imageView, url?.toUri(), placeholder, clipCircle, listener)
+    imageUri(imageView, url, clipCircle, listener, crossFade, overrideWidth, overrideHeight)
 }
 
 interface ImageLoadListener {
-    fun onImageLoaded()
+    fun onImageLoaded(resource: Drawable)
     fun onImageLoadFailed()
 }

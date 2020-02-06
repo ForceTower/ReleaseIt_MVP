@@ -20,6 +20,29 @@
         <item name="windowActionBarOverlay">true</item>
     </style>
 
+    <style name="Release.Theme.Translucent">
+        <item name="android:windowBackground">@color/scrim</item>
+        <item name="android:colorBackgroundCacheHint">@null</item>
+        <item name="android:windowContentOverlay">@null</item>
+        <item name="android:windowIsFloating">false</item>
+        <item name="android:windowIsTranslucent">true</item>
+        <item name="android:windowNoTitle">true</item>
+        <item name="android:windowDrawsSystemBarBackgrounds">true</item>
+    </style>
+
+    <style name="Release.Theme.Translucent.Detailed">
+        <item name="android:colorControlActivated">?android:colorAccent</item>
+        <item name="android:windowAllowReturnTransitionOverlap">false</item>
+        <item name="android:windowAllowEnterTransitionOverlap">false</item>
+    </style>
+
+    <style name="Release.Theme.Translucent.Detailed.Movie">
+        <item name="android:windowSharedElementEnterTransition">@transition/detailed_shared_enter</item>
+        <item name="android:windowSharedElementReturnTransition">@transition/detailed_shared_return</item>
+        <item name="android:windowEnterTransition">@transition/detailed_enter</item>
+        <item name="android:windowReturnTransition">@transition/detailed_return</item>
+    </style>
+
     <style name="Release.Widget.TabLayout.TextAppearance" parent="TextAppearance.Design.Tab">
         <item name="android:fontFamily">@font/product_sans_regular</item>
         <item name="textAllCaps">false</item>
