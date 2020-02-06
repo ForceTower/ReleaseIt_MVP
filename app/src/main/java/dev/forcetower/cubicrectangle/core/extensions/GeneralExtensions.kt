@@ -1,5 +1,6 @@
 package dev.forcetower.cubicrectangle.core.extensions
 
+import android.app.Activity
 import android.content.Context
 import android.content.res.Configuration
 import android.graphics.Bitmap
@@ -7,6 +8,7 @@ import android.graphics.drawable.BitmapDrawable
 import android.graphics.drawable.Drawable
 import android.graphics.drawable.LayerDrawable
 import android.graphics.drawable.TransitionDrawable
+import androidx.core.view.postDelayed
 import androidx.fragment.app.FragmentManager
 import androidx.fragment.app.FragmentTransaction
 import com.bumptech.glide.load.resource.gif.GifDrawable
@@ -41,4 +43,11 @@ fun Drawable.getBitmap(): Bitmap? {
         return firstFrame
     }
     return null
+}
+
+fun Activity.postponeEnterTransition(timeout: Long) {
+    postponeEnterTransition()
+    window.decorView.postDelayed(timeout) {
+        startPostponedEnterTransition()
+    }
 }

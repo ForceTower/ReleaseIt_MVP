@@ -17,6 +17,7 @@ import dev.forcetower.cubicrectangle.core.base.BaseActivity
 import dev.forcetower.cubicrectangle.core.base.BaseViewModelFactory
 import dev.forcetower.cubicrectangle.core.bindings.ImageLoadListener
 import dev.forcetower.cubicrectangle.core.extensions.getBitmap
+import dev.forcetower.cubicrectangle.core.extensions.postponeEnterTransition
 import dev.forcetower.cubicrectangle.core.ui.widget.ElasticDragDismissFrameLayout
 import dev.forcetower.cubicrectangle.core.utils.AnimUtils.getFastOutSlowInInterpolator
 import dev.forcetower.cubicrectangle.core.utils.ColorUtils
@@ -37,6 +38,7 @@ class DetailedActivity : BaseActivity(), DetailsContract.View {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        postponeEnterTransition(500L)
         presenter.attach(this)
         binding = DataBindingUtil.setContentView(this, R.layout.activity_details)
 
@@ -63,6 +65,7 @@ class DetailedActivity : BaseActivity(), DetailsContract.View {
                     .setRegion(0, 0, bitmap.width - 1, twentyFourDip)
                     .generate { palette -> applyTopPalette(bitmap, palette) }
                 binding.image.background = null
+                startPostponedEnterTransition()
             }
             override fun onImageLoadFailed() {
                 binding.image.background = null
