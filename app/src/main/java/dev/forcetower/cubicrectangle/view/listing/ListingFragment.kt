@@ -79,6 +79,7 @@ class ListingFragment : BaseFragment(), ListingContract.View {
     override fun onMovieClick(movie: Movie) {
         val direction = GenresFragmentDirections.actionGenresToDetails(movie.id)
         val view = findViewForTransition(binding.recyclerMovies, movie.id)
+        view.transitionName = getString(R.string.title_poster_transition, movie.id)
         val extras = FragmentNavigatorExtras(view to getString(R.string.title_poster_transition, movie.id))
 
         findNavController().navigate(direction, extras)
