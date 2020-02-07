@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/home_graph.xml"
+    app:startDestination="@id/genres">
+
+    <fragment
+        android:id="@+id/genres"
+        android:name="dev.forcetower.cubicrectangle.view.genres.GenresFragment"
+        android:label="Genres"
+        tools:layout="@layout/fragment_genres">
+        <action
+            android:id="@+id/action_genres_to_search"
+            app:destination="@id/search" />
+        <action
+            android:id="@+id/action_genres_to_details"
+            app:destination="@id/details"
+            app:enterAnim="@anim/fragment_fade_enter"
+            app:exitAnim="@anim/fragment_close_exit"
+            app:popEnterAnim="@anim/fragment_open_enter"
+            app:popExitAnim="@anim/fragment_fade_exit" />
+    </fragment>
+    <fragment
+        android:id="@+id/search"
+        android:name="dev.forcetower.cubicrectangle.view.search.SearchFragment"
+        android:label="SearchFragment"
+        tools:layout="@layout/fragment_search">
+        <action
+            android:id="@+id/action_search_to_details"
+            app:destination="@id/details"
+            app:enterAnim="@anim/fragment_fade_enter"
+            app:exitAnim="@anim/fragment_close_exit"
+            app:popEnterAnim="@anim/fragment_open_enter"
+            app:popExitAnim="@anim/fragment_fade_exit" />
+    </fragment>
+    <fragment
+        android:id="@+id/details"
+        android:name="dev.forcetower.cubicrectangle.view.details.DetailsFragment"
+        android:label="DetailsFragment"
+        tools:layout="@layout/fragment_details">
+        <argument android:name="movieId"
+            app:argType="long" />
+    </fragment>
+</navigation>
