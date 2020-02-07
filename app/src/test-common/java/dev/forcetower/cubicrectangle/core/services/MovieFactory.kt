@@ -15,7 +15,7 @@ object MovieFactory {
     private val counter = AtomicInteger(0)
     fun createMovieSimple(
         name: String = "movie",
-        genres: String = "1,2,3"
+        genres: String = "28,18,14,878"
     ): MovieSimple {
         return MovieSimple(
             Random.nextDouble(),
@@ -28,7 +28,7 @@ object MovieFactory {
             "pt-BR",
             "$name $counter",
             genres.split(",").map { it.toLong() },
-            "$name",
+            name,
             Random.nextDouble(),
             null,
             null

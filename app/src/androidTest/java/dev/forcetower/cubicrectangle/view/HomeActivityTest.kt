@@ -21,6 +21,7 @@ import dev.forcetower.cubicrectangle.R
 import dev.forcetower.cubicrectangle.TestApplication
 import dev.forcetower.cubicrectangle.core.services.MovieFactory
 import dev.forcetower.cubicrectangle.dagger.DaggerTestComponent
+import dev.forcetower.cubicrectangle.model.database.Genre
 import dev.forcetower.cubicrectangle.model.database.toMovie
 import dev.forcetower.cubicrectangle.testutils.MatcherUtils.firstChildOf
 import dev.forcetower.cubicrectangle.testutils.RecyclerItems
@@ -53,6 +54,12 @@ class HomeActivityTest {
     @Test
     fun navigateTheWholeApp() {
         app.database.movies().insertTesting(MovieFactory.createMovieDetailed().toMovie())
+        app.database.genres().insertTesting(listOf(
+            Genre(28L, "Ação"),
+            Genre(18L, "Drama"),
+            Genre(14L, "Fantasia"),
+            Genre(878L, "Ficção")
+        ))
 
         activityRule.launchActivity(null)
 

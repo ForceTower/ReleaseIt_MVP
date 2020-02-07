@@ -11,9 +11,10 @@ class FakeTMDbService : TMDbService {
     override suspend fun genres(): GenresResponse {
         return GenresResponse(
             listOf(
-                Genre(1L, "A"),
-                Genre(2L, "B"),
-                Genre(3L, "C")
+                Genre(28L, "Ação"),
+                Genre(18L, "Drama"),
+                Genre(14L, "Fantasia"),
+                Genre(878L, "Ficção")
             )
         )
     }

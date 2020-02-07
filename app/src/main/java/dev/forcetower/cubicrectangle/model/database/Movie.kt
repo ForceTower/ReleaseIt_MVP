@@ -25,12 +25,12 @@ data class Movie(
 fun Movie.updatedWithFields(simple: MovieSimple): Movie {
     return this.copy(
         title = simple.title,
-        posterPath = simple.posterPath,
-        backdropPath = simple.backdropPath,
+        posterPath = simple.posterPath ?: posterPath,
+        backdropPath = simple.backdropPath ?: backdropPath,
         voteCount = simple.voteCount,
         voteAverage = simple.voteAverage,
-        releaseDate = simple.releaseDate,
-        description = simple.overview,
+        releaseDate = simple.releaseDate ?: releaseDate,
+        description = simple.overview ?: description,
         popularity = simple.popularity
     )
 }

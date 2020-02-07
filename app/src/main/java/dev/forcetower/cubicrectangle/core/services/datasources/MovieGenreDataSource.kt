@@ -58,6 +58,7 @@ class MovieGenreDataSource(
                     database.movies().insertSimpleList(results)
                 }
             } catch (t: Throwable) {
+                t.printStackTrace()
                 error(t)
                 retry = {
                     loadInitial(params, callback)
