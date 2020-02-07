@@ -7,7 +7,7 @@ import dev.forcetower.cubicrectangle.core.services.TMDbService
 import javax.inject.Singleton
 
 @Module
-class TestServiceModule {
+object TestServiceModule {
     @Provides
     @Singleton
     fun provideFakeService(): TMDbService {

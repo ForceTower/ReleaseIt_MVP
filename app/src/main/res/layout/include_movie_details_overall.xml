@@ -6,8 +6,8 @@
     <data>
         <import type="dev.forcetower.cubicrectangle.core.services.converters.TimeConverters" />
         <variable
-            name="movie"
-            type="dev.forcetower.cubicrectangle.model.database.Movie" />
+            name="aggregation"
+            type="dev.forcetower.cubicrectangle.model.aggregation.MovieAndGenres" />
     </data>
 
     <com.google.android.material.card.MaterialCardView
@@ -42,7 +42,7 @@
                     android:layout_height="0dp"
                     android:contentDescription="@string/title_poster"
                     android:scaleType="centerCrop"
-                    app:imageTmdbUrl="@{movie.posterPath}"
+                    app:imageTmdbUrl="@{aggregation.movie.posterPath}"
                     app:roundedViewRadius="@{@dimen/title_details_corner}"
                     app:layout_constraintDimensionRatio="H,10:15"
                     app:layout_constraintEnd_toStartOf="@id/guideline_vertical_40"
@@ -57,7 +57,7 @@
                     android:layout_marginStart="8dp"
                     android:contentDescription="@string/title_poster"
                     android:scaleType="centerCrop"
-                    app:imageTmdbUrl="@{movie.backdropPath}"
+                    app:imageTmdbUrl="@{aggregation.movie.backdropPath}"
                     app:roundedViewRadius="@{@dimen/title_details_corner}"
                     app:layout_constraintDimensionRatio="H,16:7.5"
                     app:layout_constraintEnd_toEndOf="parent"
@@ -98,7 +98,7 @@
                         android:layout_height="wrap_content"
                         android:layout_marginTop="4dp"
                         android:gravity="center"
-                        android:text="@{@string/title_score(movie.voteAverage)}"
+                        android:text="@{@string/title_score(aggregation.movie.voteAverage)}"
                         android:textAlignment="gravity"
                         android:textColor="@color/titleScoreColor"
                         android:textSize="28sp"
@@ -134,7 +134,7 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         tools:text="87.124"
-                        android:text="@{@string/title_like_format(movie.voteCount)}"
+                        android:text="@{@string/title_like_format(aggregation.movie.voteCount)}"
                         android:textAlignment="gravity"
                         android:textColor="?attr/colorAccent"
                         android:textSize="13sp"
@@ -152,7 +152,7 @@
                     android:id="@+id/text_description"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
-                    android:text="@{movie.description}"
+                    android:text="@{aggregation.movie.description}"
                     android:textSize="13sp"
                     android:layout_marginTop="16dp"
                     android:textColor="?android:textColorSecondary"
@@ -169,6 +169,7 @@
                     android:text="@string/title_launch_date"
                     android:textSize="12sp"
                     android:textColor="?android:textColorSecondary"
+                    app:goneIf="@{aggregation.movie.releaseDate == null}"
                     app:layout_constraintTop_toBottomOf="@id/text_description"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintEnd_toEndOf="parent"/>
@@ -177,7 +178,7 @@
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     tools:text="07 de Julho de 2017"
-                    android:text="@{TimeConverters.convertToDayYearFormat(movie.releaseDate)}"
+                    android:text="@{TimeConverters.convertToDayYearFormat(aggregation.movie.releaseDate)}"
                     android:textSize="15sp"
                     android:textColor="?android:textColorPrimary"
                     app:layout_constraintTop_toBottomOf="@id/label_release_date"

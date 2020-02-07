@@ -3,7 +3,7 @@ package dev.forcetower.cubicrectangle.view.details
 import androidx.annotation.StringRes
 import androidx.lifecycle.LiveData
 import dev.forcetower.cubicrectangle.core.base.BaseContract
-import dev.forcetower.cubicrectangle.model.database.Movie
+import dev.forcetower.cubicrectangle.model.aggregation.MovieAndGenres
 import kotlinx.coroutines.CoroutineScope
 
 interface DetailsContract {
@@ -14,6 +14,6 @@ interface DetailsContract {
     }
 
     interface Presenter : BaseContract.Presenter<View> {
-        fun loadMovieDetails(movieId: Long, scope: CoroutineScope? = null): LiveData<Movie>
+        fun loadMovieDetails(movieId: Long, scope: CoroutineScope? = null): LiveData<MovieAndGenres>
     }
 }

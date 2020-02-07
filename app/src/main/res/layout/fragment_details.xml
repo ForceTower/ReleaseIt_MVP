@@ -5,8 +5,8 @@
     xmlns:bind="http://schemas.android.com/apk/res-auto">
     <data>
         <variable
-            name="movie"
-            type="dev.forcetower.cubicrectangle.model.database.Movie" />
+            name="aggregation"
+            type="dev.forcetower.cubicrectangle.model.aggregation.MovieAndGenres" />
 
         <variable
             name="contract"
@@ -79,10 +79,10 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginEnd="16dp"
-                android:text="@{movie.classification}"
+                android:text="@{aggregation.movie.classification}"
                 tools:text="PG-13"
                 android:textSize="14sp"
-                app:goneIf="@{movie.classification == null || movie.classification.length == 0}"
+                app:goneIf="@{aggregation.movie.classification == null || aggregation.movie.classification.length == 0}"
                 android:textColor="@color/text_primary_light"/>
 
             <TextView
@@ -90,10 +90,20 @@
                 android:layout_height="wrap_content"
                 android:layout_marginEnd="16dp"
                 tools:text="133 min"
-                app:goneIf="@{movie.runtime == null}"
+                app:goneIf="@{aggregation.movie.runtime == null}"
                 android:textColor="@color/text_primary_light"
-                android:text="@{movie.runtime == null ? @string/unknown_runtime : @string/title_runtime_format(movie.runtime)}"
+                android:text="@{aggregation.movie.runtime == null ? @string/unknown_runtime : @string/title_runtime_format(aggregation.movie.runtime)}"
                 android:textSize="14sp"/>
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginEnd="16dp"
+                app:goneIf="@{aggregation.genres.size() == 0}"
+                android:textColor="@color/text_primary_light"
+                android:text="@{aggregation.genresString(3)}"
+                android:textSize="14sp"
+                tools:text="Animação / Aventura / Diversão"/>
         </LinearLayout>
 
         <TextView
@@ -103,7 +113,7 @@
             android:layout_marginHorizontal="16dp"
             android:textSize="21sp"
             android:layout_marginBottom="8dp"
-            android:text="@{movie.title}"
+            android:text="@{aggregation.movie.title}"
             android:textColor="@color/text_primary_light"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
@@ -124,7 +134,7 @@
             <include
                 android:id="@+id/details"
                 layout="@layout/include_movie_details_overall"
-                bind:movie="@{movie}"/>
+                bind:aggregation="@{aggregation}"/>
         </FrameLayout>
 
         <ImageButton

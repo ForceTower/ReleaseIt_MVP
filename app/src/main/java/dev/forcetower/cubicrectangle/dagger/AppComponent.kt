@@ -8,6 +8,7 @@ import dagger.android.support.AndroidSupportInjectionModule
 import dev.forcetower.cubicrectangle.CubicApp
 import dev.forcetower.cubicrectangle.dagger.module.ActivityModule
 import dev.forcetower.cubicrectangle.dagger.module.AppModule
+import dev.forcetower.cubicrectangle.dagger.module.DatabaseModule
 import dev.forcetower.cubicrectangle.dagger.module.ServiceModule
 import dev.forcetower.cubicrectangle.dagger.module.ViewModelModule
 import javax.inject.Singleton
@@ -19,6 +20,7 @@ import javax.inject.Singleton
     ActivityModule::class,
     AppModule::class,
     ServiceModule::class,
+    DatabaseModule::class,
     ViewModelModule::class
 ])
 interface AppComponent : AndroidInjector<CubicApp> {

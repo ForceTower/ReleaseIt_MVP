@@ -6,6 +6,7 @@ import androidx.lifecycle.switchMap
 import androidx.paging.PagedList
 import androidx.paging.toLiveData
 import dev.forcetower.cubicrectangle.AppExecutors
+import dev.forcetower.cubicrectangle.core.persistence.ReleaseDB
 import dev.forcetower.cubicrectangle.core.services.TMDbService
 import dev.forcetower.cubicrectangle.core.services.datasources.MovieGenreDataSource
 import dev.forcetower.cubicrectangle.core.services.datasources.factory.MovieGenreDataSourceFactory
@@ -14,19 +15,30 @@ import dev.forcetower.cubicrectangle.core.services.datasources.factory.EmptyData
 import dev.forcetower.cubicrectangle.core.services.datasources.factory.QueryDataSourceFactory
 import dev.forcetower.cubicrectangle.core.services.datasources.helpers.Listing
 import dev.forcetower.cubicrectangle.core.ui.lifecycle.EmptyLiveData
+import dev.forcetower.cubicrectangle.model.aggregation.MovieAndGenres
 import dev.forcetower.cubicrectangle.model.database.Movie
 import dev.forcetower.cubicrectangle.model.database.toMovie
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.withContext
 import timber.log.Timber
 import javax.inject.Inject
 import javax.inject.Singleton
 
 @Singleton
 class MoviesRepository @Inject constructor(
+    private val database: ReleaseDB,
     private val service: TMDbService,
     private val executors: AppExecutors
 ) {
+    suspend fun genres() {
+        withContext(Dispatchers.IO) {
+            try {
+                val genres = service.genres().genres
+                database.genres().insert(genres)
+            } catch (ignored: Throwable) {}
+        }
+    }
 
     fun getMovies(): LiveData<List<Movie>> {
         return liveData(Dispatchers.IO) {
@@ -54,15 +66,15 @@ class MoviesRepository @Inject constructor(
 
     fun getMovie(
         movieId: Long,
-        scope: CoroutineScope,
-        error: (Throwable) -> Unit
-    ): LiveData<Movie> {
+        scope: CoroutineScope
+    ): LiveData<MovieAndGenres> {
         return liveData(Dispatchers.IO + scope.coroutineContext) {
             try {
-                emit(service.movieDetails(movieId).toMovie())
+                emitSource(database.movies().getMovieById(movieId))
+                val detailed = service.movieDetails(movieId)
+                database.movies().insertDetailed(detailed)
             } catch (t: Throwable) {
                 Timber.i(t)
-                error(t)
             }
         }
     }
@@ -72,7 +84,15 @@ class MoviesRepository @Inject constructor(
         scope: CoroutineScope,
         error: (Throwable) -> Unit
     ): Listing<Movie> {
-        val factory = QueryDataSourceFactory(query, service, scope, error, executors.networkIO())
+        val factory = QueryDataSourceFactory(
+            query,
+            service,
+            scope,
+            error,
+            executors.networkIO(),
+            database
+        )
+
         val livePagedList = factory.toLiveData(
             pageSize = 20,
             fetchExecutor = executors.networkIO()
@@ -102,7 +122,8 @@ class MoviesRepository @Inject constructor(
             service,
             scope,
             error,
-            executors.networkIO()
+            executors.networkIO(),
+            database
         )
 
         val livePagedList = factory.toLiveData(
@@ -146,7 +167,7 @@ class MoviesRepository @Inject constructor(
             .setInitialLoadSizeHint(20)
             .build()
 
-        val source = MovieGenreDataSource(listOf(genre), service, scope, error, executors.networkIO())
+        val source = MovieGenreDataSource(listOf(genre), service, scope, error, executors.networkIO(), database)
         return PagedList.Builder(source, config)
             .setNotifyExecutor(executors.mainThread())
             .setFetchExecutor(executors.diskIO())
@@ -165,7 +186,7 @@ class MoviesRepository @Inject constructor(
             .setInitialLoadSizeHint(20)
             .build()
 
-        val source = QueryDataSource(query, service, scope, error, executors.networkIO())
+        val source = QueryDataSource(query, service, scope, error, executors.networkIO(), database)
         return PagedList.Builder(source, config)
             .setNotifyExecutor(executors.mainThread())
             .setFetchExecutor(executors.networkIO())

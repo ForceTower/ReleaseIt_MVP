@@ -2,12 +2,15 @@ package dev.forcetower.cubicrectangle.core.services.datasources
 
 import androidx.lifecycle.MutableLiveData
 import androidx.paging.PageKeyedDataSource
+import dev.forcetower.cubicrectangle.core.persistence.ReleaseDB
 import dev.forcetower.cubicrectangle.model.database.Movie
 import dev.forcetower.cubicrectangle.model.database.toMovie
 import dev.forcetower.cubicrectangle.core.services.TMDbService
 import dev.forcetower.cubicrectangle.core.services.datasources.helpers.NetworkState
 import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 import timber.log.Timber
 import java.util.concurrent.Executor
 
@@ -16,7 +19,8 @@ class MovieGenreDataSource(
     private val service: TMDbService,
     private val scope: CoroutineScope,
     private val error: (Throwable) -> Unit,
-    private val retryExecutor: Executor
+    private val retryExecutor: Executor,
+    private val database: ReleaseDB
 ) : PageKeyedDataSource<Int, Movie>() {
     private val genreString = genres.joinToString(",")
 
@@ -39,11 +43,20 @@ class MovieGenreDataSource(
         scope.launch {
             try {
                 networkState.postValue(NetworkState.LOADING)
+
+                if (database.genres().empty()) {
+                    val genres = service.genres().genres
+                    database.genres().insert(genres)
+                }
+
                 val results = service.moviesByGenre(genreString).results
                 retry = null
                 networkState.postValue(NetworkState.LOADED)
                 initialLoad.postValue(NetworkState.LOADED)
                 callback.onResult(results.map { it.toMovie() }, null, 2)
+                withContext(Dispatchers.IO) {
+                    database.movies().insertSimpleList(results)
+                }
             } catch (t: Throwable) {
                 error(t)
                 retry = {
@@ -65,6 +78,9 @@ class MovieGenreDataSource(
                 networkState.postValue(NetworkState.LOADED)
                 val nextPage = if (response.page >= response.totalPages) null else response.page + 1
                 callback.onResult(response.results.map { it.toMovie() }, nextPage)
+                withContext(Dispatchers.IO) {
+                    database.movies().insertSimpleList(response.results)
+                }
             } catch (t: Throwable) {
                 retry = {
                     loadAfter(params, callback)
@@ -84,6 +100,9 @@ class MovieGenreDataSource(
                 networkState.postValue(NetworkState.LOADED)
                 val previousPage = if (response.page == 1) null else response.page - 1
                 callback.onResult(response.results.map { it.toMovie() }, previousPage)
+                withContext(Dispatchers.IO) {
+                    database.movies().insertSimpleList(response.results)
+                }
             } catch (t: Throwable) {
                 retry = {
                     loadBefore(params, callback)

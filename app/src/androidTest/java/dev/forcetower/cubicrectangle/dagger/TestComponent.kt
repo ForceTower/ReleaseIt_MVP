@@ -9,6 +9,7 @@ import dagger.android.support.AndroidSupportInjectionModule
 import dev.forcetower.cubicrectangle.TestApplication
 import dev.forcetower.cubicrectangle.dagger.module.ActivityModule
 import dev.forcetower.cubicrectangle.dagger.module.AppModule
+import dev.forcetower.cubicrectangle.dagger.module.TestDatabaseModule
 import dev.forcetower.cubicrectangle.dagger.module.TestServiceModule
 import dev.forcetower.cubicrectangle.dagger.module.ViewModelModule
 import javax.inject.Singleton
@@ -20,6 +21,7 @@ import javax.inject.Singleton
     ActivityModule::class,
     AppModule::class,
     TestServiceModule::class,
+    TestDatabaseModule::class,
     ViewModelModule::class
 ])
 interface TestComponent : AndroidInjector<TestApplication> {

@@ -25,7 +25,7 @@ import dev.forcetower.cubicrectangle.core.base.BaseFragment
 import dev.forcetower.cubicrectangle.core.base.BaseViewModelFactory
 import dev.forcetower.cubicrectangle.core.extensions.fadeIn
 import dev.forcetower.cubicrectangle.databinding.FragmentDetailsBinding
-import dev.forcetower.cubicrectangle.model.database.Movie
+import dev.forcetower.cubicrectangle.model.aggregation.MovieAndGenres
 import dev.forcetower.cubicrectangle.view.details.helpers.UIAlphaFrame
 import kotlinx.coroutines.CoroutineScope
 import javax.inject.Inject
@@ -39,6 +39,8 @@ class DetailsFragment : BaseFragment(), DetailsContract.View {
     private val viewModel by viewModels<DetailsViewModel> { factory }
     private val presenter: DetailsContract.Presenter
         get() = viewModel.presenter
+
+    private var currentLink: String? = null
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -62,15 +64,18 @@ class DetailsFragment : BaseFragment(), DetailsContract.View {
         })
     }
 
-    private fun onMovieUpdate(movie: Movie?) {
+    private fun onMovieUpdate(movie: MovieAndGenres?) {
         movie ?: return
-        binding.movie = movie
+        binding.aggregation = movie
         prepareImageAndColors(movie)
     }
 
-    private fun prepareImageAndColors(movie: Movie) {
+    private fun prepareImageAndColors(aggregation: MovieAndGenres) {
+        val movie = aggregation.movie
         val url = movie.backdropPath ?: movie.posterPath ?: return
         val link = "https://image.tmdb.org/t/p/w780$url"
+        if (link == currentLink) return
+        currentLink = link
         Glide.with(this).load(link)
             .listener(object : RequestListener<Drawable?> {
                 override fun onLoadFailed(e: GlideException?, model: Any, target: Target<Drawable?>, isFirstResource: Boolean): Boolean {

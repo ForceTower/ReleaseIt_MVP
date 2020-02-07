@@ -19,7 +19,9 @@ import androidx.test.platform.app.InstrumentationRegistry
 import androidx.test.rule.ActivityTestRule
 import dev.forcetower.cubicrectangle.R
 import dev.forcetower.cubicrectangle.TestApplication
+import dev.forcetower.cubicrectangle.core.services.MovieFactory
 import dev.forcetower.cubicrectangle.dagger.DaggerTestComponent
+import dev.forcetower.cubicrectangle.model.database.toMovie
 import dev.forcetower.cubicrectangle.testutils.MatcherUtils.firstChildOf
 import dev.forcetower.cubicrectangle.testutils.RecyclerItems
 import org.hamcrest.CoreMatchers.not
@@ -50,6 +52,8 @@ class HomeActivityTest {
 
     @Test
     fun navigateTheWholeApp() {
+        app.database.movies().insertTesting(MovieFactory.createMovieDetailed().toMovie())
+
         activityRule.launchActivity(null)
 
         onView(withId(R.id.pager_genres))
@@ -63,7 +67,7 @@ class HomeActivityTest {
         val recycler = allOf(isDescendantOfA(action), withId(R.id.recycler_movies))
 
         onView(recycler)
-            .check(RecyclerItems.hasItemCount(31))
+            .check(RecyclerItems.hasItemCount(42))
             .check(matches(hasDescendant(withText("movie"))))
             .perform(RecyclerViewActions.scrollToPosition<RecyclerView.ViewHolder>(10))
             .perform(RecyclerViewActions.actionOnItemAtPosition<RecyclerView.ViewHolder>(10, click()))
@@ -72,7 +76,7 @@ class HomeActivityTest {
             .check(matches(isDisplayed()))
 
         onView(withId(R.id.title_name))
-            .check(matches(withText("Homem-Aranha: De Volta ao Lar")))
+            .check(matches(isDisplayed()))
 
         onView(withId(R.id.btn_back))
             .perform(click())
