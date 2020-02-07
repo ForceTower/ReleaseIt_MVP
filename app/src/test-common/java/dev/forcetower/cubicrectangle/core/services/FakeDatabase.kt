@@ -51,6 +51,7 @@ class FakeDatabase : ReleaseDB() {
         return object : GenresDao {
             override suspend fun insert(genres: List<Genre>) = Unit
             override suspend fun empty() = false
+            override fun insertTesting(genres: List<Genre>) {}
         }
     }
 
