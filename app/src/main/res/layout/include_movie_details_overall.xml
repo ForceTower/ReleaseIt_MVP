@@ -8,6 +8,9 @@
         <variable
             name="aggregation"
             type="dev.forcetower.cubicrectangle.model.aggregation.MovieAndGenres" />
+        <variable
+            name="listener"
+            type="dev.forcetower.cubicrectangle.core.bindings.ImageLoadListener" />
     </data>
 
     <com.google.android.material.card.MaterialCardView
@@ -42,8 +45,11 @@
                     android:layout_height="0dp"
                     android:contentDescription="@string/title_poster"
                     android:scaleType="centerCrop"
+                    android:transitionName="@{@string/title_poster_transition(aggregation.movie.id)}"
                     app:imageTmdbUrl="@{aggregation.movie.posterPath}"
                     app:roundedViewRadius="@{@dimen/title_details_corner}"
+                    app:dontTransform="@{true}"
+                    app:listener="@{listener}"
                     app:layout_constraintDimensionRatio="H,10:15"
                     app:layout_constraintEnd_toStartOf="@id/guideline_vertical_40"
                     app:layout_constraintStart_toStartOf="parent"
@@ -148,42 +154,48 @@
                     app:constraint_referenced_ids="image_poster,like_layout,rating_layout"
                     app:barrierDirection="bottom"/>
 
-                <TextView
-                    android:id="@+id/text_description"
+                <LinearLayout
+                    android:id="@+id/layout_extra_info"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
-                    android:text="@{aggregation.movie.description}"
-                    android:textSize="13sp"
-                    android:layout_marginTop="16dp"
-                    android:textColor="?android:textColorSecondary"
+                    android:orientation="vertical"
                     app:layout_constraintTop_toBottomOf="@id/top_content"
                     app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintEnd_toEndOf="parent"
-                    tools:text="Após os graves incidentes do filme anterior, o menino Homi Aranha está de volta para mais um filme eletrizante de super heroi, desta vez ele faz o papel de um estagiário do grande e rico Tony Stark. Será que ele conseguirá manter o estágio?"/>
+                    app:layout_constraintEnd_toEndOf="parent">
+                    <TextView
+                        android:id="@+id/text_description"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:text="@{aggregation.movie.description}"
+                        android:textSize="13sp"
+                        android:layout_marginTop="16dp"
+                        android:textColor="?android:textColorSecondary"
+                        tools:text="Após os graves incidentes do filme anterior, o menino Homi Aranha está de volta para mais um filme eletrizante de super heroi, desta vez ele faz o papel de um estagiário do grande e rico Tony Stark. Será que ele conseguirá manter o estágio?"/>
 
-                <TextView
-                    android:id="@+id/label_release_date"
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="24dp"
-                    android:text="@string/title_launch_date"
-                    android:textSize="12sp"
-                    android:textColor="?android:textColorSecondary"
-                    app:goneIf="@{aggregation.movie.releaseDate == null}"
-                    app:layout_constraintTop_toBottomOf="@id/text_description"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintEnd_toEndOf="parent"/>
+                    <TextView
+                        android:id="@+id/label_release_date"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="24dp"
+                        android:text="@string/title_launch_date"
+                        android:textSize="12sp"
+                        android:textColor="?android:textColorSecondary"
+                        app:goneIf="@{aggregation.movie.releaseDate == null}"
+                        app:layout_constraintTop_toBottomOf="@id/text_description"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintEnd_toEndOf="parent"/>
 
-                <TextView
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    tools:text="07 de Julho de 2017"
-                    android:text="@{TimeConverters.convertToDayYearFormat(aggregation.movie.releaseDate)}"
-                    android:textSize="15sp"
-                    android:textColor="?android:textColorPrimary"
-                    app:layout_constraintTop_toBottomOf="@id/label_release_date"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintEnd_toEndOf="parent" />
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        tools:text="07 de Julho de 2017"
+                        android:text="@{TimeConverters.convertToDayYearFormat(aggregation.movie.releaseDate)}"
+                        android:textSize="15sp"
+                        android:textColor="?android:textColorPrimary"
+                        app:layout_constraintTop_toBottomOf="@id/label_release_date"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintEnd_toEndOf="parent" />
+                </LinearLayout>
             </androidx.constraintlayout.widget.ConstraintLayout>
         </ScrollView>
     </com.google.android.material.card.MaterialCardView>

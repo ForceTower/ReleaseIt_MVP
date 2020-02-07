@@ -5,6 +5,10 @@
     xmlns:bind="http://schemas.android.com/apk/res-auto">
     <data>
         <variable
+            name="listener"
+            type="dev.forcetower.cubicrectangle.core.bindings.ImageLoadListener" />
+
+        <variable
             name="aggregation"
             type="dev.forcetower.cubicrectangle.model.aggregation.MovieAndGenres" />
 
@@ -132,9 +136,10 @@
             app:layout_constraintBottom_toBottomOf="parent">
 
             <include
-                android:id="@+id/details"
+                android:id="@+id/include_additional"
                 layout="@layout/include_movie_details_overall"
-                bind:aggregation="@{aggregation}"/>
+                bind:aggregation="@{aggregation}"
+                bind:listener="@{listener}"/>
         </FrameLayout>
 
         <ImageButton

@@ -9,17 +9,23 @@ import com.bumptech.glide.load.engine.GlideException
 import com.bumptech.glide.request.RequestListener
 import com.bumptech.glide.request.target.Target
 
-@BindingAdapter(value = ["imageUrl", "clipCircle", "listener"], requireAll = false)
+@BindingAdapter(value = [
+    "imageUrl",
+    "clipCircle",
+    "listener",
+    "dontTransform"
+], requireAll = false)
 fun imageUri(
     imageView: ImageView,
     imageUrl: String?,
-    clipCircle: Boolean?,
-    listener: ImageLoadListener?
+    clipCircle: Boolean? = false,
+    listener: ImageLoadListener? = null,
+    dontTransform: Boolean? = false
 ) {
     imageUrl ?: return
-    val circular = clipCircle ?: false
     var request = Glide.with(imageView).load(imageUrl)
-    if (circular) request = request.circleCrop()
+    if (clipCircle == true) request = request.circleCrop()
+    if (dontTransform == true) request = request.dontTransform()
 
     if (listener != null) {
         request = request.listener(object : RequestListener<Drawable> {
@@ -48,10 +54,21 @@ fun imageUri(
     request.into(imageView)
 }
 
-@BindingAdapter(value = ["imageTmdbUrl", "clipCircle", "listener"], requireAll = false)
-fun imageTmdbUrl(imageView: ImageView, imageUrl: String?, clipCircle: Boolean?, listener: ImageLoadListener?) {
+@BindingAdapter(value = [
+    "imageTmdbUrl",
+    "clipCircle",
+    "listener",
+    "dontTransform"
+], requireAll = false)
+fun imageTmdbUrl(
+    imageView: ImageView,
+    imageUrl: String?,
+    clipCircle: Boolean?,
+    listener: ImageLoadListener?,
+    dontTransform: Boolean? = false
+) {
     val url = if (imageUrl == null) null else "https://image.tmdb.org/t/p/w780$imageUrl"
-    imageUri(imageView, url, clipCircle, listener)
+    imageUri(imageView, url, clipCircle, listener, dontTransform)
 }
 
 interface ImageLoadListener {
