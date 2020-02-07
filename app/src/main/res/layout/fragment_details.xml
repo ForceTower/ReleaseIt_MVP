@@ -71,43 +71,44 @@
 
         <LinearLayout
             android:id="@+id/info_layout"
-            android:layout_width="0dp"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
             android:layout_marginHorizontal="16dp"
             android:layout_marginBottom="16dp"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
+            android:animateLayoutChanges="true"
+            android:orientation="horizontal"
             app:layout_constraintBottom_toBottomOf="@id/fading_edge_container"
-            android:layout_height="wrap_content"
-            android:orientation="horizontal">
+            app:layout_constraintStart_toStartOf="parent">
+
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginEnd="16dp"
                 android:text="@{aggregation.movie.classification}"
-                tools:text="PG-13"
+                android:textColor="@color/text_primary_light"
                 android:textSize="14sp"
                 app:goneIf="@{aggregation.movie.classification == null || aggregation.movie.classification.length == 0}"
-                android:textColor="@color/text_primary_light"/>
+                tools:text="PG-13" />
 
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginEnd="16dp"
-                tools:text="133 min"
-                app:goneIf="@{aggregation.movie.runtime == null}"
-                android:textColor="@color/text_primary_light"
                 android:text="@{aggregation.movie.runtime == null ? @string/unknown_runtime : @string/title_runtime_format(aggregation.movie.runtime)}"
-                android:textSize="14sp"/>
+                android:textColor="@color/text_primary_light"
+                android:textSize="14sp"
+                app:goneIf="@{aggregation.movie.runtime == null}"
+                tools:text="133 min" />
 
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginEnd="16dp"
-                app:goneIf="@{aggregation.genres.size() == 0}"
-                android:textColor="@color/text_primary_light"
                 android:text="@{aggregation.genresString(3)}"
+                android:textColor="@color/text_primary_light"
                 android:textSize="14sp"
-                tools:text="Animação / Aventura / Diversão"/>
+                app:goneIf="@{aggregation.genres.size() == 0}"
+                tools:text="Animação / Aventura / Diversão" />
         </LinearLayout>
 
         <TextView
